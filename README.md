@@ -1,0 +1,1 @@
+# Sistema-Konkurrente-eta-banatuak
