@@ -1,50 +1,100 @@
 package pbl6.stream;
 
 import com.rabbitmq.client.*;
+
 import org.apache.kafka.clients.producer.*;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
 public class KafkaConnector {
 
     private final static String RABBITMQ_EXCHANGE = "datos";
-    private final static String KAFKA_TOPIC = "datos-embalse";
+    private final static String KAFKA_TOPIC = "datos";
+    ConnectionFactory factory;
 
-    public static void main(String[] args) throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
+    public KafkaConnector() {
+        factory = new ConnectionFactory();
         factory.setHost("localhost");
         factory.setUsername("guest");
         factory.setPassword("guest");
+    }
 
-        Connection rmqConnection = factory.newConnection();
-        Channel channel = rmqConnection.createChannel();
+    public void suscribe() {
 
-        channel.exchangeDeclare(RABBITMQ_EXCHANGE, "fanout", true);
-        
-        String queue = channel.queueDeclare().getQueue();
-        channel.queueBind(queue, RABBITMQ_EXCHANGE, "");
+        Channel channel = null;
+        try (Connection connection = factory.newConnection()) {
 
-        // Kafka setup
-        Properties kafkaProps = new Properties();
-        kafkaProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        kafkaProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        kafkaProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+            channel = connection.createChannel();
+            channel.exchangeDeclare(RABBITMQ_EXCHANGE, "fanout", true);
 
-        KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, RABBITMQ_EXCHANGE, "");
 
-        System.out.println("[Bridge] Waiting for messages from RabbitMQ...");
+            MyConsumer consumer = new MyConsumer(channel);
+            boolean autoack = true;
+            String tag = channel.basicConsume(queueName, autoack, consumer);
 
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-            System.out.println("[Bridge] Received from RMQ: " + message);
+            synchronized (this) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            channel.basicCancel(tag);
+            channel.close();
 
-            // Forward to Kafka
+        } catch (IOException | TimeoutException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public synchronized void stop() {
+        this.notify();
+    }
+
+    public class MyConsumer extends DefaultConsumer {
+
+        public MyConsumer(Channel channel) {
+            super(channel);
+        }
+
+        @Override
+        public void handleDelivery(String consumerTag, Envelope envelope,
+                AMQP.BasicProperties properties, byte[] body) throws IOException {
+            String message = new String(body, "UTF-8");
+            System.out.println("[Bridge] " + message);
+
+            Properties kafkaProps = new Properties();
+            kafkaProps.put("bootstrap.servers", "localhost:9092");
+            kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+            KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
+
             ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, message);
-            // producer.send(record);
-        };
+            producer.send(record);
+            producer.flush();
+            producer.close();
+        }
 
-        channel.basicConsume(queue, true, deliverCallback, consumerTag -> {});
+    }
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        Scanner scanner = new Scanner(System.in);
+        KafkaConnector subscriber = new KafkaConnector();
+        System.out.println("[Bridge] Waiting for messages from RabbitMQ...");
+        Thread waitThread = new Thread(() -> {
+            scanner.nextLine();
+            subscriber.stop();
+        });
+        waitThread.start();
+        subscriber.suscribe();
+        scanner.close();
     }
 }
