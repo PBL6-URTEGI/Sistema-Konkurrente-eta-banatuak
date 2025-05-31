@@ -1,4 +1,4 @@
-package stream.zona1.publisher.model;
+package stream.common.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.Gson;

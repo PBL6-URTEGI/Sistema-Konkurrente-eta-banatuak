@@ -14,8 +14,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import stream.zona1.publisher.model.EmbalseDato;
-import stream.zona1.publisher.model.UnsafeOkHttpClient;
+import stream.common.model.EmbalseDato;
+import stream.common.UnsafeOkHttpClient;
 
 public class DataPublisher {
     ConnectionFactory factory;

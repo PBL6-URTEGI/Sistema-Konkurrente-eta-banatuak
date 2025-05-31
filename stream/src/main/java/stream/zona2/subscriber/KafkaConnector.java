@@ -11,8 +11,8 @@ import java.util.concurrent.TimeoutException;
 
 public class KafkaConnector {
 
-    private final static String RABBITMQ_EXCHANGE = "datos";
-    private final static String KAFKA_TOPIC = "datos";
+    private final static String RABBITMQ_EXCHANGE = "stream_zona2";
+    private final static String KAFKA_TOPIC = "stream_zona2";
     ConnectionFactory factory;
 
     public KafkaConnector() {

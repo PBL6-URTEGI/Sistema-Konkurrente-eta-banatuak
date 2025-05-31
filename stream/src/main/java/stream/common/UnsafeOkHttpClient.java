@@ -1,4 +1,4 @@
-package stream.zona2.publisher.model;
+package stream.common;
 
 import java.security.cert.X509Certificate;
 
