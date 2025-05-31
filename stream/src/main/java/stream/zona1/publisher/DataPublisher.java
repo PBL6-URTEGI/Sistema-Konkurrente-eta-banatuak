@@ -77,13 +77,9 @@ public class DataPublisher {
             return null;
         }
     }
-
-    public synchronized void stop() {
-		this.notify();
-	}
-
     public static void main(String[] args) {
 		DataPublisher dp = new DataPublisher();
 		dp.suscribe();
+        UnsafeOkHttpClient.shutdown();
 	}
 }

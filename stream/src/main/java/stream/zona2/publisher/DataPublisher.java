@@ -78,21 +78,8 @@ public class DataPublisher {
         }
     }
 
-    public synchronized void stop() {
-		this.notify();
-	}
-
     public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		
 		DataPublisher dp = new DataPublisher();
-		Thread waitingThread = new Thread(()-> {
-			scanner.nextLine();
-			dp.stop();
-		});
-
-		waitingThread.start();
 		dp.suscribe();
-		scanner.close();
 	}
 }
