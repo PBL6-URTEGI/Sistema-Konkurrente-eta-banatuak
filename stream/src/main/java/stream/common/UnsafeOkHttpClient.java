@@ -19,12 +19,18 @@ public class UnsafeOkHttpClient {
         if (client == null) {
             try {
                 // Trust all certs (insecure, for testing only)
-                TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        public void checkClientTrusted(X509Certificate[] chain, String authType) {}
-                        public void checkServerTrusted(X509Certificate[] chain, String authType) {}
-                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[] {}; }
-                    }
+                TrustManager[] trustAllCerts = new TrustManager[] {
+                        new X509TrustManager() {
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                            }
+
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[] {};
+                            }
+                        }
                 };
 
                 SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -32,9 +38,9 @@ public class UnsafeOkHttpClient {
                 SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
                 client = new OkHttpClient.Builder()
-                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
-                    .hostnameVerifier((hostname, session) -> true)
-                    .build();
+                        .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
+                        .hostnameVerifier((hostname, session) -> true)
+                        .build();
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -47,9 +53,10 @@ public class UnsafeOkHttpClient {
         if (client != null) {
             client.dispatcher().executorService().shutdown();
             try {
-                client.dispatcher().executorService().awaitTermination(5, TimeUnit.SECONDS);
+                if (!client.dispatcher().executorService().awaitTermination(10, TimeUnit.SECONDS)) {
+                    System.err.println("OkHttpClient executor did not terminate in time");
+                }
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             client.connectionPool().evictAll();
