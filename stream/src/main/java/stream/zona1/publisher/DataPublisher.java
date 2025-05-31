@@ -31,8 +31,8 @@ public class DataPublisher {
     public DataPublisher() {
 		factory = new ConnectionFactory();
 		factory.setHost("10.0.40.16");
-		factory.setUsername("guest");
-		factory.setPassword("guest");
+		factory.setUsername("rabbit");
+		factory.setPassword("rabbit");
 	}
 
     public void suscribe() {
