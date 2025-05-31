@@ -17,9 +17,9 @@ public class KafkaConnector {
 
     public KafkaConnector() {
         factory = new ConnectionFactory();
-        factory.setHost("localhost");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setHost("10.0.40.16");
+		factory.setUsername("rabbit");
+		factory.setPassword("rabbit");
     }
 
     public void suscribe() {
