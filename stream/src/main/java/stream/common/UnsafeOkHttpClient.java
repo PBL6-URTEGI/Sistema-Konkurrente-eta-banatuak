@@ -1,6 +1,8 @@
 package stream.common;
 
+import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -44,7 +46,20 @@ public class UnsafeOkHttpClient {
     public static void shutdown() {
         if (client != null) {
             client.dispatcher().executorService().shutdown();
+            try {
+                client.dispatcher().executorService().awaitTermination(5, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             client.connectionPool().evictAll();
+            if (client.cache() != null) {
+                try {
+                    client.cache().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
