@@ -84,5 +84,6 @@ public class DataPublisher {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             UnsafeOkHttpClient.shutdown();
         }));
+        System.exit(0);
     }
 }
