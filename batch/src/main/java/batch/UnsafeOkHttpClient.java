@@ -18,7 +18,6 @@ public class UnsafeOkHttpClient {
     public static OkHttpClient getUnsafeClient() {
         if (client == null) {
             try {
-                // Trust all certs (insecure, for testing only)
                 TrustManager[] trustAllCerts = new TrustManager[] {
                         new X509TrustManager() {
                             public void checkClientTrusted(X509Certificate[] chain, String authType) {
@@ -38,6 +37,9 @@ public class UnsafeOkHttpClient {
                 SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
                 client = new OkHttpClient.Builder()
+                        .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                        .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0])
                         .hostnameVerifier((hostname, session) -> true)
                         .build();

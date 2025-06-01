@@ -5,10 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import batch.model.Metadata;
@@ -35,7 +31,8 @@ public class CheckMetadata {
                 try (FileWriter writer = new FileWriter(file)) {
                     writer.write(metadata.toString());
                 }
-                System.out.println("File created and data written.");
+                System.out.println("File created and data written. Initiating prediction API call.");
+                new ReceivePrediction();
             } else {
                 String existingContent = new String(Files.readAllBytes(Paths.get(FILE)));
 
@@ -43,7 +40,8 @@ public class CheckMetadata {
                     try (FileWriter writer = new FileWriter(file)) {
                         writer.write(metadata.toString());
                     }
-                    System.out.println("File updated with new metadata.");
+                    System.out.println("File updated with new metadata. Initiating prediction API call.");
+                    new ReceivePrediction();
                 } else {
                     System.out.println("No changes in metadata. File not updated.");
                 }
