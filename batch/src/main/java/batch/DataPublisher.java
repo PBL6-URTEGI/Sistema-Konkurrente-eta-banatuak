@@ -1,21 +1,16 @@
-package pbl6.batch;
+package batch;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import pbl6.batch.model.EmbalseDato;
-import pbl6.batch.model.UnsafeOkHttpClient;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import batch.model.Metadata;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,8 +18,8 @@ public class DataPublisher {
     ConnectionFactory factory;
     final static String EXCHANGE_DATOS = "datos";
 
-    final static String apiKey = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
-    final static String apiUrl = "https://www.saihebro.com/datos/apiopendata?&apikey=" + apiKey
+    final static String API_KEY = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
+    final static String API_URL = "https://www.saihebro.com/datos/apiopendata?&apikey=" + API_KEY
             + "&prevision=prevision_completa";
 
     public DataPublisher() {
@@ -35,9 +30,9 @@ public class DataPublisher {
     }
 
     public void suscribe() {
-        List<EmbalseDato> datos = recibirDatosAPI();
+        List<Metadata> datos = recibirDatosAPI();
 
-        for (EmbalseDato dato : datos) {
+        for (Metadata dato : datos) {
             System.out.println(dato);
         }
 
@@ -60,10 +55,10 @@ public class DataPublisher {
         // }
     }
 
-    public List<EmbalseDato> recibirDatosAPI() {
+    public List<Metadata> recibirDatosAPI() {
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
         Request request = new Request.Builder()
-                .url(apiUrl)
+                .url(API_URL)
                 .get()
                 .addHeader("cache-control", "no-cache")
                 .build();
@@ -71,7 +66,7 @@ public class DataPublisher {
         try (Response response = client.newCall(request).execute()) {
             String body = response.body().string();
             ObjectMapper mapper = new ObjectMapper();
-            List<EmbalseDato> datos = mapper.readValue(body, new TypeReference<List<EmbalseDato>>() {
+            List<Metadata> datos = mapper.readValue(body, new TypeReference<List<Metadata>>() {
             });
 
             return datos;

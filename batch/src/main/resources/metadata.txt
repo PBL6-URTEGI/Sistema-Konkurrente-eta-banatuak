@@ -1,0 +1,6 @@
+ID: 4733-2
+Descripción: 2025-05-30 8:00h
+Texto: 
+Fecha TOF: 2025-05-30 08:00:00
+Fecha Fin: 2025-06-03 23:45:00
+Obsoleto: false
