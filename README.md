@@ -27,3 +27,33 @@ En cada proyecto se encuentra un publicador y un suscriptor.
 - *DataPublisher.java:* Realiza la llamada a la API, parsea el JSON que devuelve y manda la información procesada al suscriptor mediante RabbitMQ. Para hacer esto se hace uso de un exchanger tipo fanout llamado *stream_zona1/2*. Está diseñado para ejecutarse en local, o en una máquina virtual que tenga RabbitMQ instalado.
 
 - *KafkaConnector.java:* Recibe la información procesada del publicador mediante el exchanger apropiado de RabbitMQ, y actúa de puente para reenviar esta información a Kafka. Esto es necesario debido a la incompatibilidad entre RabbitMQ y Apache Kafka, debido a que son dos brokers que funcionan de manera independiente. Esta clase de Java declara y configura un productor de Kakfa y manda la información recibida desde el publicador a Kafka con el tópico *stream_zona1/2*. Está diseñado para ejecutarse en el nodo de Proxmox que tenga el contenedor de Kafka configurado. No necesita tener RabbitMQ instalado, pues utiliza la instancia creada por el publicador al conectarse a él mediante su IP (*factory.setHost("\<IP instancia de RabbitMQ>")*). Se ha configurado *rabbit* *rabbit* como su usuario y contraseña, ya que RabbitMQ solo puede utilizar las credenciales *guest* localmente.
+
+Estos son los comandos necesarios para poder ejecutar el suscriptor desde Proxmox:
+
+1. Descarga Java y Maven:
+
+```
+apt install default-jdk -y
+apt install maven -y
+```
+
+2. Clona el repositorio:
+
+```
+git clone https://github.com/PBL6-URTEGI/Sistema-Konkurrente-eta-banatuak.git
+```
+
+3. Ejecuta el suscriptor (es posible que primero tengas que cambiar la IP en el fichero del suscriptor):
+
+```
+cd Sistema-Konkurrente-eta-banatuak/stream
+mvn exec:java -Dexec.mainClass="stream.zona1.subscriber.KafkaConnector"
+```
+
+Para actualizar el código a la última versión:
+
+```
+git reset --hard
+git clean -fd
+git pull
+```
