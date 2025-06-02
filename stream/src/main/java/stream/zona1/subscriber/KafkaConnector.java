@@ -17,7 +17,7 @@ public class KafkaConnector {
 
     public KafkaConnector() {
         factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("10.0.40.16");
 		factory.setUsername("rabbit");
 		factory.setPassword("rabbit");
     }
@@ -70,17 +70,17 @@ public class KafkaConnector {
             String message = new String(body, "UTF-8");
             System.out.println("[Bridge -> Kafka] " + message);
 
-            // Properties kafkaProps = new Properties();
-            // kafkaProps.put("bootstrap.servers", "localhost:9092");
-            // kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            // kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            Properties kafkaProps = new Properties();
+            kafkaProps.put("bootstrap.servers", "localhost:9092");
+            kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-            // KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
+            KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
 
-            // ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, message);
-            // producer.send(record);
-            // producer.flush();
-            // producer.close();
+            ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, message);
+            producer.send(record);
+            producer.flush();
+            producer.close();
         }
 
     }
