@@ -12,12 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.net.ftp.FTPClient;
 
-public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<String, List<String>>>> {
+public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<String, String>>> {
     private int inicio, fin;
     private List<String> fileNames;
     private FTPClient ftpClient;
     private String prefix;
-    private List<ConcurrentHashMap<String, List<String>>> mapList;
+    private List<ConcurrentHashMap<String, String>> mapList;
 
     final static String DOWNLOAD_PATH = "./src/main/resources/ftp/";
     final static String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
@@ -28,11 +28,11 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
         this.fileNames = fileNames;
         this.ftpClient = ftpClient;
         this.prefix = prefix;
-        this.mapList = new ArrayList<ConcurrentHashMap<String, List<String>>>();
+        this.mapList = new ArrayList<ConcurrentHashMap<String, String>>();
     }
 
     @Override
-    public List<ConcurrentHashMap<String, List<String>>> call() throws Exception {
+    public List<ConcurrentHashMap<String, String>> call() throws Exception {
         for (int i = inicio; i < fin; i++) {
             ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);
@@ -43,6 +43,7 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
 
             downloadFile(remoteFile, localFilePath, localFile);
             readFile(localFile, valueStorer, fileNames.get(i));
+            valueStorer.calculateAverage();
 
             mapList.add(valueStorer.getMap());
         }

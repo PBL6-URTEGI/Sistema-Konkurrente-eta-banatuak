@@ -32,7 +32,7 @@ public class ConnectToServer {
             "nivel_rio", "porcentaje_llenado_embalse", "porcentaje_llenado_embalse_visor", "precipitacion",
             "temperatura_agua", "temperatura", "volumen_embalse", "volumen_embalse_visor");
 
-    private static List<Future<List<ConcurrentHashMap<String, List<String>>>>> futures;
+    private static List<Future<List<ConcurrentHashMap<String, String>>>> futures;
     private static List<CSVDownloaderReader> tareas;
     private static ExecutorService executorService;
 
@@ -93,17 +93,16 @@ public class ConnectToServer {
         tareas.add(new CSVDownloaderReader(finish, DOWNLOAD_FILENAMES.size(), DOWNLOAD_FILENAMES, ftpClient, prefix));
         futures = executorService.invokeAll(tareas);
 
-        for (Future<List<ConcurrentHashMap<String, List<String>>>> future : futures) {
+        for (Future<List<ConcurrentHashMap<String, String>>> future : futures) {
             try {
-                List<ConcurrentHashMap<String, List<String>>> resultList = future.get();
-                for (ConcurrentHashMap<String, List<String>> resultMap : resultList) {
-                    for (Map.Entry<String, List<String>> entry : resultMap.entrySet()) {
+                List<ConcurrentHashMap<String, String>> resultList = future.get();
+                for (ConcurrentHashMap<String, String> resultMap : resultList) {
+                    for (Map.Entry<String, String> entry : resultMap.entrySet()) {
                         String key = entry.getKey();
-                        List<String> values = entry.getValue();
-                        if (key.equals("title")) {
-                            System.out.println(key + ": " + values.get(0));
-                        }
+                        String value = entry.getValue();
+                        System.out.println(key + ": " + value);
                     }
+                    System.out.println("-----------------------------------------");
                 }
 
             } catch (InterruptedException | ExecutionException e) {
