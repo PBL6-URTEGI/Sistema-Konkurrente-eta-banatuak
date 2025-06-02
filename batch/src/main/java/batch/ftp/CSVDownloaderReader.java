@@ -17,7 +17,6 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
     private List<String> fileNames;
     private FTPClient ftpClient;
     private String prefix;
-    private ConcurrentHashMap<String, List<String>> map;
     private List<ConcurrentHashMap<String, List<String>>> mapList;
 
     final static String DOWNLOAD_PATH = "./src/main/resources/ftp/";
@@ -29,13 +28,13 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
         this.fileNames = fileNames;
         this.ftpClient = ftpClient;
         this.prefix = prefix;
-        this.map = new ConcurrentHashMap<>();
         this.mapList = new ArrayList<ConcurrentHashMap<String, List<String>>>();
     }
 
     @Override
     public List<ConcurrentHashMap<String, List<String>>> call() throws Exception {
         for (int i = inicio; i < fin; i++) {
+            ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);
 
             String remoteFile = prefix + fileNames.get(i) + DOWNLOAD_APPENDIX;
@@ -47,7 +46,6 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
 
             mapList.add(valueStorer.getMap());
         }
-
         return mapList;
     }
 

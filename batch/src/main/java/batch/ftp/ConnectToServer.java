@@ -100,6 +100,9 @@ public class ConnectToServer {
                     for (Map.Entry<String, List<String>> entry : resultMap.entrySet()) {
                         String key = entry.getKey();
                         List<String> values = entry.getValue();
+                        if (key.equals("title")) {
+                            System.out.println(key + ": " + values.get(0));
+                        }
                     }
                 }
 
