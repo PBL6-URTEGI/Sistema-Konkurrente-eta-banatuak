@@ -5,10 +5,12 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,6 +22,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConnectToServer {
     final static String SERVER = "168.63.45.161";
@@ -93,18 +99,23 @@ public class ConnectToServer {
         tareas.add(new CSVDownloaderReader(finish, DOWNLOAD_FILENAMES.size(), DOWNLOAD_FILENAMES, ftpClient, prefix));
         futures = executorService.invokeAll(tareas);
 
+        Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
+
         for (Future<List<ConcurrentHashMap<String, String>>> future : futures) {
             try {
                 List<ConcurrentHashMap<String, String>> resultList = future.get();
                 for (ConcurrentHashMap<String, String> resultMap : resultList) {
+                    String fileName = resultMap.get("title");
                     for (Map.Entry<String, String> entry : resultMap.entrySet()) {
                         String key = entry.getKey();
-                        String value = entry.getValue();
-                        System.out.println(key + ": " + value);
-                    }
-                    System.out.println("-----------------------------------------");
-                }
+                        if ("title".equals(key))
+                            continue;
 
+                        tagToFileValues
+                                .computeIfAbsent(key, k -> new LinkedHashMap<>())
+                                .put(fileName, entry.getValue());
+                    }
+                }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -112,6 +123,26 @@ public class ConnectToServer {
 
         executorService.shutdown();
         executorService.awaitTermination(200, TimeUnit.SECONDS);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayNode arrayNode = mapper.createArrayNode();
+
+            for (Map.Entry<String, Map<String, String>> tagEntry : tagToFileValues.entrySet()) {
+                ObjectNode objNode = mapper.createObjectNode();
+                objNode.put("id_estacion", tagEntry.getKey());
+                for (Map.Entry<String, String> fileEntry : tagEntry.getValue().entrySet()) {
+                    objNode.put(fileEntry.getKey(), fileEntry.getValue());
+                }
+                arrayNode.add(objNode);
+            }
+
+            String jsonOutput = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(arrayNode);
+            Files.write(Paths.get("./src/main/resources/averages.json"), jsonOutput.getBytes(),
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

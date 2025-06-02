@@ -25,9 +25,10 @@ public class ReceivePrediction {
         new OutdatedPredictionRemover(predictions, valuesManager);
         List<String> tags = valuesManager.getTags();
         for (String tag : tags) {
-            System.out.println(tag + ": " + valuesManager.getAverage(tag));;
+            System.out.println(tag + ": " + valuesManager.getAverage(tag));
+            ;
         }
-        
+
         ObjectMapper mapper = new ObjectMapper();
 
         try {
@@ -39,26 +40,26 @@ public class ReceivePrediction {
         }
     }
 
-        public List<Prediction> getPredictions() {
-            OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .get()
-                    .addHeader("cache-control", "no-cache")
-                    .build();
+    public List<Prediction> getPredictions() {
+        OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .get()
+                .addHeader("cache-control", "no-cache")
+                .build();
 
-            try (Response response = client.newCall(request).execute()) {
-                InputStream is = response.body().byteStream();
+        try (Response response = client.newCall(request).execute()) {
+            InputStream is = response.body().byteStream();
 
-                ObjectMapper mapper = new ObjectMapper();
-                DatosWrapper wrapper = mapper.readValue(is, DatosWrapper.class);
-                List<Prediction> predictions = wrapper.getDatos();
+            ObjectMapper mapper = new ObjectMapper();
+            DatosWrapper wrapper = mapper.readValue(is, DatosWrapper.class);
+            List<Prediction> predictions = wrapper.getDatos();
 
-                return predictions;
+            return predictions;
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+    }
 }

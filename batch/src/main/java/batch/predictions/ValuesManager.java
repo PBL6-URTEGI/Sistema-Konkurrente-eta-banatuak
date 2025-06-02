@@ -12,7 +12,7 @@ public class ValuesManager {
     public ValuesManager() {
         values = new ConcurrentHashMap<>();
     }
-    
+
     public void addValue(String ms_TAG, double ms_VALOR) {
         values.computeIfAbsent(ms_TAG, k -> Collections.synchronizedList(new ArrayList<>())).add(ms_VALOR);
     }
