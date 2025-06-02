@@ -80,13 +80,8 @@ public class CSVDownloadFTP {
             }
 
             try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
-                boolean success = ftpClient.retrieveFile(remoteFile, outputStream);
-                if (success) {
-                    System.out.println("Downloaded: " + remoteFile);
-                } else {
-                    System.err.println("Failed to download: " + remoteFile);
-                    localFile.delete();
-                }
+                ftpClient.retrieveFile(remoteFile, outputStream);
+                System.out.println("Downloaded: " + remoteFile);
             } catch (Exception e) {
                 System.err.println("Error downloading " + remoteFile + ": " + e.getMessage());
             }
