@@ -9,10 +9,11 @@ import batch.predictions.model.Prediction;
 
 public class OutdatedPredictionRemover {
     List<Prediction> predictions;
+    ValuesManager valuesManager;
 
-    public OutdatedPredictionRemover(List<Prediction> predictions) {
+    public OutdatedPredictionRemover(List<Prediction> predictions, ValuesManager valuesManager) {
         this.predictions = predictions;
-
+        this.valuesManager = valuesManager;
         removeOutdated();
     }
 
@@ -29,6 +30,8 @@ public class OutdatedPredictionRemover {
 
             if (dateTime.isBefore(now) || dateTime.isEqual(now)) {
                 iterator.remove();
+            } else {
+                valuesManager.addValue(prediction.getMs_TAG(), prediction.getMs_VALOR());
             }
         }
     }

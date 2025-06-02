@@ -20,9 +20,14 @@ public class ReceivePrediction {
 
     public ReceivePrediction() {
         List<Prediction> predictions = getPredictions();
+        ValuesManager valuesManager = new ValuesManager();
 
         long inicio = System.currentTimeMillis();
-        new OutdatedPredictionRemover(predictions);
+        new OutdatedPredictionRemover(predictions, valuesManager);
+        List<String> tags = valuesManager.getTags();
+        for (String tag : tags) {
+            System.out.println(tag + ": " + valuesManager.getAverage(tag));;
+        }
         long fin = System.currentTimeMillis();
         System.out.println("Total: " + (fin - inicio) + " ms");
         ObjectMapper mapper = new ObjectMapper();
