@@ -17,11 +17,6 @@ public class ValueStorer {
     public void parse(String line, String fileName) {
         String[] elements = line.split(",");
 
-        if (elements.length < 12) {
-            System.err.println("Skipping malformed line in " + fileName + ": " + line);
-            return;
-        }
-
         if (elements[0].equals("Fecha")) {
             values.put("title", Collections.synchronizedList(new ArrayList<>()));
             values.get("title").add(fileName);
