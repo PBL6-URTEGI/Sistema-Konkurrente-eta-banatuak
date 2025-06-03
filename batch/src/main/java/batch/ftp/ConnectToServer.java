@@ -86,15 +86,17 @@ public class ConnectToServer {
         tareas = new ArrayList<>();
         futures = new ArrayList<>();
         int cpu = Runtime.getRuntime().availableProcessors();
-        int start, finish = 0;
-        int step = DOWNLOAD_FILENAMES.size() / cpu;
+        int start = 0, finish = 0;
+        int total = DOWNLOAD_FILENAMES.size();
+        int threads = Math.min(cpu, total);
+        int step = (int) Math.ceil((double) total / threads);
 
         executorService = Executors.newFixedThreadPool(cpu);
 
-        for (int i = 0; i < step - 1; i++) {
-            start = 2 + i * cpu;
-            finish = 2 + (i + 1) * cpu;
-            tareas.add(new CSVDownloaderReader(start, finish, DOWNLOAD_FILENAMES, ftpClient, prefix));
+        for (int i = 0; i < threads; i++) {
+            int end = Math.min(start + step, total);
+            tareas.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES, ftpClient, prefix));
+            start = end;
         }
         tareas.add(new CSVDownloaderReader(finish, DOWNLOAD_FILENAMES.size(), DOWNLOAD_FILENAMES, ftpClient, prefix));
         futures = executorService.invokeAll(tareas);
