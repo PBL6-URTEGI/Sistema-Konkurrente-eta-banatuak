@@ -44,15 +44,11 @@ public class CheckMetadata {
                     new ReceivePrediction();
                 } else {
                     System.out.println("No changes in metadata. File not updated.");
-                    new ReceivePrediction();
-
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        new ReceivePrediction();
-
     }
 
     public Metadata getMetadata() {

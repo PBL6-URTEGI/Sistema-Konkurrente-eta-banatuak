@@ -21,13 +21,11 @@ public class ReceivePrediction {
     public ReceivePrediction() {
         List<Prediction> predictions = getPredictions();
         ValuesManager valuesManager = new ValuesManager();
-
+        
+        long start = System.currentTimeMillis();
         new OutdatedPredictionRemover(predictions, valuesManager);
-        List<String> tags = valuesManager.getTags();
-        for (String tag : tags) {
-            System.out.println(tag + ": " + valuesManager.getAverage(tag));
-            ;
-        }
+        long finish = System.currentTimeMillis();
+        System.out.println("Tiempo empleado: " + (finish - start) + "ms");
 
         ObjectMapper mapper = new ObjectMapper();
 
