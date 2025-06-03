@@ -1,6 +1,9 @@
 package batch.ftp;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,6 +36,7 @@ public class ConnectToServer {
     final static String USERNAME = "mondragon_edu";
     final static String PASSWORD = "mondragon@1975";
     final static String DOWNLOAD_PATH = "./src/main/resources/ftp/";
+    final static String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
     final static List<String> DOWNLOAD_FILENAMES = Arrays.asList(
             "caudal_rio", "nivel_embalse", "nivel_embalse_visor",
             "nivel_rio", "porcentaje_llenado_embalse", "porcentaje_llenado_embalse_visor", "precipitacion",
@@ -41,9 +45,10 @@ public class ConnectToServer {
     private static List<Future<List<ConcurrentHashMap<String, String>>>> futures;
     private static List<CSVDownloaderReader> tareas;
     private static ExecutorService executorService;
+    private static FTPClient ftpClient;
 
     public ConnectToServer() {
-        FTPClient ftpClient = new FTPClient();
+        ftpClient = new FTPClient();
 
         try {
             ftpClient.connect(SERVER, PORT);
@@ -54,6 +59,14 @@ public class ConnectToServer {
 
             if (ftpClient.login(USERNAME, PASSWORD)) {
                 deleteOldFiles(prefix);
+
+                for (int i = 0; i < DOWNLOAD_FILENAMES.size(); i++) {
+                    String remoteFile = prefix + DOWNLOAD_FILENAMES.get(i) + DOWNLOAD_APPENDIX;
+                    String localFilePath = DOWNLOAD_PATH + remoteFile;
+                    File localFile = new File(localFilePath);
+                    downloadFile(remoteFile, localFilePath, localFile);
+                }
+
                 createThreads(prefix, ftpClient);
                 ftpClient.logout();
             } else {
@@ -65,6 +78,19 @@ public class ConnectToServer {
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    public void downloadFile(String remoteFile, String localFilePath, File localFile) {
+        if (localFile.exists()) {
+            System.out.println("File already downloaded: " + remoteFile);
+        } else {
+            try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
+                ftpClient.retrieveFile(remoteFile, outputStream);
+                System.out.println("Downloaded: " + remoteFile);
+            } catch (Exception e) {
+                System.err.println("Error downloading or reading " + remoteFile + ": " + e.getMessage());
+            }
         }
     }
 
@@ -86,7 +112,7 @@ public class ConnectToServer {
         tareas = new ArrayList<>();
         futures = new ArrayList<>();
         int cpu = Runtime.getRuntime().availableProcessors();
-        int start = 0, finish = 0;
+        int start = 0;
         int total = DOWNLOAD_FILENAMES.size();
         int threads = Math.min(cpu, total);
         int step = (int) Math.ceil((double) total / threads);
@@ -95,10 +121,10 @@ public class ConnectToServer {
 
         for (int i = 0; i < threads; i++) {
             int end = Math.min(start + step, total);
-            tareas.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES, ftpClient, prefix));
+            tareas.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES));
             start = end;
         }
-        tareas.add(new CSVDownloaderReader(finish, DOWNLOAD_FILENAMES.size(), DOWNLOAD_FILENAMES, ftpClient, prefix));
+
         futures = executorService.invokeAll(tareas);
 
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
