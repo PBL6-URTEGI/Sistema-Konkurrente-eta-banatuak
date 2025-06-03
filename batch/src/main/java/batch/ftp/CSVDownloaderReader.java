@@ -52,7 +52,7 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
 
     public void downloadFile(String remoteFile, String localFilePath, File localFile) {
         if (localFile.exists()) {
-            // System.out.println("File already downloaded: " + remoteFile);
+            System.out.println("File already downloaded: " + remoteFile);
         } else {
             try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
                 ftpClient.retrieveFile(remoteFile, outputStream);
