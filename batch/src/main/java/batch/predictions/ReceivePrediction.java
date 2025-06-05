@@ -5,41 +5,96 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import batch.ftp.CSVDownloaderReader;
 import batch.predictions.model.DatosWrapper;
 import batch.predictions.model.Prediction;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class ReceivePrediction {
-    static final String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=b3c5a6ce7d856ba4d2fa3ab1d238ab1c&prevision=prevision_completa";
 
-    public ReceivePrediction() {
+    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
+
+    public ReceivePrediction() throws InterruptedException, IOException {
         List<Prediction> predictions = getPredictions();
-        ValuesManager valuesManager = new ValuesManager();
+        // predictions.addAll(predictions);
+        // predictions.addAll(predictions);
+        // predictions.addAll(predictions);
 
-        long start = System.currentTimeMillis();
-        new OutdatedPredictionRemover(predictions, valuesManager);
-        long finish = System.currentTimeMillis();
-        System.out.println("Tiempo empleado: " + (finish - start) + "ms");
+        List<Prediction> toJSON = new ArrayList<>();
+        
+        List<OutdatedPredictionRemover> tasks = new ArrayList<>();
+        List<Future<List<Prediction>>> futures;
+        
+        int cpu = Runtime.getRuntime().availableProcessors();
+        int start = 0;
+        int end;
+        int total = predictions.size();
+        int step = total / cpu;
+        
+        ExecutorService executorService = Executors.newFixedThreadPool(cpu);
+
+        long timeStart = System.currentTimeMillis();
+        
+        for (int i = 0; i <= cpu - 1; i++) {
+            start = i * step;
+            if (i == cpu - 1) {
+                end = total;
+            } else {
+                end = (i + 1) * step;
+            }
+            tasks.add(new OutdatedPredictionRemover(start, end, predictions));
+        }
+
+        futures = executorService.invokeAll(tasks);
+
+        for (Future<List<Prediction>> future : futures) {
+            try {
+                List<Prediction> resultList = future.get();
+                toJSON.addAll(resultList);
+            } catch (InterruptedException | ExecutionException e) {
+                throw new InterruptedException();
+            }
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(200, TimeUnit.SECONDS);
 
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(
-                    new File("./src/main/resources/predictions.json"), predictions);
+                    new File("./src/main/resources/predictions.json"), toJSON);
+            long timeFinish = System.currentTimeMillis();
+            System.out.println("Reading total: " + (timeFinish - timeStart) + "ms");
         } catch (IOException e) {
             // Exception
         }
     }
 
-    public List<Prediction> getPredictions() {
+    public static String getApiKey() throws IOException {
+        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    }
+
+    public List<Prediction> getPredictions() throws IOException {
+        String apikey = getApiKey();
+        String url = "https://www.saihebro.com/datos/apiopendata?apikey=" + apikey + "&prevision=prevision_completa";
+
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(url)
                 .get()
                 .addHeader("cache-control", "no-cache")
                 .build();

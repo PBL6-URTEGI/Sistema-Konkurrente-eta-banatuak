@@ -74,7 +74,7 @@ public class CheckMetadata {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         CheckMetadata cm = new CheckMetadata();
         cm.suscribe();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

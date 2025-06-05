@@ -100,7 +100,7 @@ public class ConnectToServer {
 
     private static void createThreads() throws InterruptedException {
         List<Future<List<ConcurrentHashMap<String, String>>>> futures;
-        List<CSVDownloaderReader> tareas = new ArrayList<>();
+        List<CSVDownloaderReader> tasks = new ArrayList<>();
 
         int cpu = Runtime.getRuntime().availableProcessors();
         int start = 0;
@@ -112,11 +112,11 @@ public class ConnectToServer {
 
         for (int i = 0; i < threads; i++) {
             int end = Math.min(start + step, total);
-            tareas.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES));
+            tasks.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES));
             start = end;
         }
 
-        futures = executorService.invokeAll(tareas);
+        futures = executorService.invokeAll(tasks);
 
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
 

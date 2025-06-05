@@ -11,35 +11,46 @@ import batch.predictions.model.Prediction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
 public class ReceivePrediction {
-    static final String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=b3c5a6ce7d856ba4d2fa3ab1d238ab1c&prevision=prevision_completa";
+    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
 
-    public ReceivePrediction() {
+    public ReceivePrediction() throws IOException {
         List<Prediction> predictions = getPredictions();
-        ValuesManager valuesManager = new ValuesManager();
+        // predictions.addAll(predictions);
+        // predictions.addAll(predictions);
+        // predictions.addAll(predictions);
 
         long start = System.currentTimeMillis();
-        new OutdatedPredictionRemover(predictions, valuesManager);
-        long finish = System.currentTimeMillis();
-        System.out.println("Tiempo empleado: " + (finish - start) + "ms");
+        new OutdatedPredictionRemover(predictions);
 
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(
                     new File("./src/main/resources/predictions.json"), predictions);
+            long finish = System.currentTimeMillis();
+            System.out.println("Reading total: " + (finish - start) + "ms");
         } catch (IOException e) {
             // Exception
         }
     }
 
-    public List<Prediction> getPredictions() {
+    public static String getApiKey() throws IOException {
+        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    }
+
+    public List<Prediction> getPredictions() throws IOException {
+        String apikey = getApiKey();
+        String url = "https://www.saihebro.com/datos/apiopendata?apikey=" + apikey + "&prevision=prevision_completa";
+
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(url)
                 .get()
                 .addHeader("cache-control", "no-cache")
                 .build();

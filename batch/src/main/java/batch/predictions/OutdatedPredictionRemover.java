@@ -2,37 +2,38 @@ package batch.predictions;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import batch.predictions.model.Prediction;
 
-public class OutdatedPredictionRemover {
+public class OutdatedPredictionRemover implements Callable<List<Prediction>> {
+    int start;
+    int end;
     List<Prediction> predictions;
-    ValuesManager valuesManager;
 
-    public OutdatedPredictionRemover(List<Prediction> predictions, ValuesManager valuesManager) {
+    public OutdatedPredictionRemover(int start, int end, List<Prediction> predictions) {
+        this.start = start;
+        this.end = end;
         this.predictions = predictions;
-        this.valuesManager = valuesManager;
-        removeOutdated();
     }
 
-    public void removeOutdated() {
-        Iterator<Prediction> iterator = predictions.iterator();
+    @Override
+    public List<Prediction> call() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
+        List<Prediction> predictionList = new ArrayList<>();
 
-        while (iterator.hasNext()) {
-            Prediction prediction = iterator.next();
-            String date = prediction.getMs_FECHA_HORA().getDate();
-
+        for (int i = start; i < end; i++) {
+            String date = predictions.get(i).getMs_FECHA_HORA().getDate();
             LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
 
-            if (dateTime.isBefore(now) || dateTime.isEqual(now)) {
-                iterator.remove();
-            } else {
-                valuesManager.addValue(prediction.getMs_TAG(), prediction.getMs_VALOR());
+            if (!dateTime.isBefore(now) && !dateTime.isEqual(now)) {
+                predictionList.add(predictions.get(i));
             }
         }
+
+        return predictionList;
     }
 }

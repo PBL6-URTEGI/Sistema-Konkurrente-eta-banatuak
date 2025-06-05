@@ -17,7 +17,7 @@ public class CheckMetadata {
     static final String FILE = "./src/main/resources/metadata.txt";
     static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
 
-    public void suscribe() throws IOException {
+    public void suscribe() throws IOException, InterruptedException {
         Metadata metadata = getMetadata();
         File file = new File(FILE);
 
@@ -74,7 +74,7 @@ public class CheckMetadata {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         CheckMetadata cm = new CheckMetadata();
         cm.suscribe();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
