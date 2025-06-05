@@ -25,7 +25,7 @@ public class Subscriber {
         this.kafkaTopic = kafkaTopic;
     }
 
-    public void suscribe() {
+    public void suscribe() throws InterruptedException {
         try (Connection connection = factory.newConnection()) {
             try (Channel channel = connection.createChannel()) {
                 channel.exchangeDeclare(rabbitmqExchange, "fanout", true);
@@ -45,12 +45,12 @@ public class Subscriber {
         }
     }
 
-    public void waitThread() {
+    public void waitThread() throws InterruptedException {
         synchronized (this) {
             try {
                 this.wait();
             } catch (InterruptedException e) {
-                // Exception
+                throw new InterruptedException();
             }
         }
     }
