@@ -15,6 +15,8 @@ public class UnsafeOkHttpClient {
 
     private static OkHttpClient client;
 
+    private UnsafeOkHttpClient() {}
+
     public static OkHttpClient getUnsafeClient() {
         if (client == null) {
             try {
@@ -22,9 +24,11 @@ public class UnsafeOkHttpClient {
                 TrustManager[] trustAllCerts = new TrustManager[] {
                         new X509TrustManager() {
                             public void checkClientTrusted(X509Certificate[] chain, String authType) {
+                                // Method not implemented
                             }
 
                             public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                                // Method not implemented
                             }
 
                             public X509Certificate[] getAcceptedIssuers() {
@@ -57,14 +61,14 @@ public class UnsafeOkHttpClient {
                     System.err.println("OkHttpClient executor did not terminate in time");
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // Exception
             }
             client.connectionPool().evictAll();
             if (client.cache() != null) {
                 try {
                     client.cache().close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // Exception
                 }
             }
         }

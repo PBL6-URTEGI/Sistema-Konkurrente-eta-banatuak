@@ -31,33 +31,26 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConnectToServer {
-    final static String SERVER = "168.63.45.161";
-    final static int PORT = 21;
-    final static String USERNAME = "mondragon_edu";
-    final static String PASSWORD = "mondragon@1975";
-    final static String DOWNLOAD_PATH = "./src/main/resources/ftp/";
-    final static String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
-    final static List<String> DOWNLOAD_FILENAMES = Arrays.asList(
+    static final String DOWNLOAD_PATH = "./src/main/resources/ftp/";
+    static final String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
+    static final List<String> DOWNLOAD_FILENAMES = Arrays.asList(
             "caudal_rio", "nivel_embalse", "nivel_embalse_visor",
             "nivel_rio", "porcentaje_llenado_embalse", "porcentaje_llenado_embalse_visor", "precipitacion",
             "temperatura_agua", "temperatura", "volumen_embalse", "volumen_embalse_visor");
 
-    private static List<Future<List<ConcurrentHashMap<String, String>>>> futures;
-    private static List<CSVDownloaderReader> tareas;
-    private static ExecutorService executorService;
-    private static FTPClient ftpClient;
+    private FTPClient ftpClient;
 
-    public ConnectToServer() {
+    public ConnectToServer() throws InterruptedException {
         ftpClient = new FTPClient();
 
         try {
-            ftpClient.connect(SERVER, PORT);
+            ftpClient.connect("168.63.45.161", 21);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
 
-            if (ftpClient.login(USERNAME, PASSWORD)) {
+            if (ftpClient.login("mondragon_edu", "mondragon@1975")) {
                 deleteOldFiles(prefix);
 
                 for (int i = 0; i < DOWNLOAD_FILENAMES.size(); i++) {
@@ -67,17 +60,14 @@ public class ConnectToServer {
                     downloadFile(remoteFile, localFilePath, localFile);
                 }
 
-                createThreads(prefix, ftpClient);
+                createThreads();
                 ftpClient.logout();
             } else {
                 System.out.println("Login failed.");
             }
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (IOException | InterruptedException e) {
+            throw new InterruptedException();
         }
     }
 
@@ -108,16 +98,17 @@ public class ConnectToServer {
         }
     }
 
-    private static void createThreads(String prefix, FTPClient ftpClient) throws InterruptedException {
-        tareas = new ArrayList<>();
-        futures = new ArrayList<>();
+    private static void createThreads() throws InterruptedException {
+        List<Future<List<ConcurrentHashMap<String, String>>>> futures;
+        List<CSVDownloaderReader> tareas = new ArrayList<>();
+
         int cpu = Runtime.getRuntime().availableProcessors();
         int start = 0;
         int total = DOWNLOAD_FILENAMES.size();
         int threads = Math.min(cpu, total);
         int step = (int) Math.ceil((double) total / threads);
 
-        executorService = Executors.newFixedThreadPool(cpu);
+        ExecutorService executorService = Executors.newFixedThreadPool(cpu);
 
         for (int i = 0; i < threads; i++) {
             int end = Math.min(start + step, total);
@@ -134,18 +125,10 @@ public class ConnectToServer {
                 List<ConcurrentHashMap<String, String>> resultList = future.get();
                 for (ConcurrentHashMap<String, String> resultMap : resultList) {
                     String fileName = resultMap.get("title");
-                    for (Map.Entry<String, String> entry : resultMap.entrySet()) {
-                        String key = entry.getKey();
-                        if ("title".equals(key))
-                            continue;
-
-                        tagToFileValues
-                                .computeIfAbsent(key, k -> new LinkedHashMap<>())
-                                .put(fileName, entry.getValue());
-                    }
+                    tagToFileValues(resultMap, fileName, tagToFileValues);
                 }
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                throw new InterruptedException();
             }
         }
 
@@ -169,11 +152,24 @@ public class ConnectToServer {
             Files.write(Paths.get("./src/main/resources/averages.json"), jsonOutput.getBytes(),
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (Exception e) {
-            e.printStackTrace();
+            // Exception
         }
     }
 
-    public static void main(String[] args) {
+    public static void tagToFileValues(ConcurrentHashMap<String, String> resultMap, String fileName,
+            Map<String, Map<String, String>> tagToFileValues) {
+        for (Map.Entry<String, String> entry : resultMap.entrySet()) {
+            String key = entry.getKey();
+            if ("title".equals(key))
+                continue;
+
+            tagToFileValues
+                    .computeIfAbsent(key, k -> new LinkedHashMap<>())
+                    .put(fileName, entry.getValue());
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
         long start = System.currentTimeMillis();
         new ConnectToServer();
         long finish = System.currentTimeMillis();

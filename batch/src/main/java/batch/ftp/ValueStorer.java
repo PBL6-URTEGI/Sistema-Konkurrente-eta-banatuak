@@ -7,6 +7,7 @@ public class ValueStorer {
     private final ConcurrentHashMap<String, List<String>> values;
     private final ConcurrentHashMap<String, String> averages;
     private List<String> headerKeys;
+    private String title = "title";
 
     public ValueStorer(ConcurrentHashMap<String, List<String>> values) {
         this.values = values;
@@ -18,11 +19,11 @@ public class ValueStorer {
         String[] elements = line.split(",");
 
         if (elements[0].equals("Fecha")) {
-            values.put("title", Collections.synchronizedList(new ArrayList<>()));
-            values.get("title").add(fileName);
+            values.put(title, Collections.synchronizedList(new ArrayList<>()));
+            values.get(title).add(fileName);
 
             headerKeys.clear();
-            headerKeys.add("title");
+            headerKeys.add(title);
 
             for (int i = 1; i < elements.length; i++) {
                 values.put(elements[i], Collections.synchronizedList(new ArrayList<>()));
@@ -38,11 +39,11 @@ public class ValueStorer {
     }
 
     public void calculateAverage() {
-        List<String> titles = values.get("title");
-        averages.put("title", titles.get(0));
+        List<String> titles = values.get(title);
+        averages.put(title, titles.get(0));
 
         for (String key : headerKeys) {
-            if (key.equals("title"))
+            if (key.equals(title))
                 continue;
 
             List<String> strValues = values.get(key);
@@ -55,6 +56,7 @@ public class ValueStorer {
                     sum += val;
                     count++;
                 } catch (Exception e) {
+                    // Exception
                 }
             }
 

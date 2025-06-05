@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatosWrapper {
-    public List<Prediction> datos;
+    private List<Prediction> datos;
 
     public List<Prediction> getDatos() {
         return datos;

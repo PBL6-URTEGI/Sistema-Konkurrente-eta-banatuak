@@ -11,17 +11,16 @@ import batch.predictions.model.Prediction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 public class ReceivePrediction {
-    final static String API_KEY = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
-    final static String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=" + API_KEY
-            + "&prevision=prevision_completa";
+    static final String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=b3c5a6ce7d856ba4d2fa3ab1d238ab1c&prevision=prevision_completa";
 
     public ReceivePrediction() {
         List<Prediction> predictions = getPredictions();
         ValuesManager valuesManager = new ValuesManager();
-        
+
         long start = System.currentTimeMillis();
         new OutdatedPredictionRemover(predictions, valuesManager);
         long finish = System.currentTimeMillis();
@@ -33,8 +32,7 @@ public class ReceivePrediction {
             mapper.writerWithDefaultPrettyPrinter().writeValue(
                     new File("./src/main/resources/predictions.json"), predictions);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // Exception
         }
     }
 
@@ -51,13 +49,9 @@ public class ReceivePrediction {
 
             ObjectMapper mapper = new ObjectMapper();
             DatosWrapper wrapper = mapper.readValue(is, DatosWrapper.class);
-            List<Prediction> predictions = wrapper.getDatos();
-
-            return predictions;
-
+            return wrapper.getDatos();
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            return Collections.emptyList();
         }
     }
 }

@@ -5,53 +5,52 @@ import com.rabbitmq.client.*;
 import org.apache.kafka.clients.producer.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
 public class KafkaConnector {
 
-    private final static String RABBITMQ_EXCHANGE = "stream_zona1";
-    private final static String KAFKA_TOPIC = "stream_zona1";
+    private static final String RABBITMQ_EXCHANGE = "stream_zona1";
+    private static final String KAFKA_TOPIC = "stream_zona1";
     ConnectionFactory factory;
 
     public KafkaConnector() {
         factory = new ConnectionFactory();
         factory.setHost("10.0.40.16");
-		factory.setUsername("rabbit");
-		factory.setPassword("rabbit");
+        factory.setUsername("rabbit");
+        factory.setPassword("rabbit");
     }
 
     public void suscribe() {
-
-        Channel channel = null;
         try (Connection connection = factory.newConnection()) {
+            try (Channel channel = connection.createChannel()) {
+                channel.exchangeDeclare(RABBITMQ_EXCHANGE, "fanout", true);
 
-            channel = connection.createChannel();
-            channel.exchangeDeclare(RABBITMQ_EXCHANGE, "fanout", true);
+                String queueName = channel.queueDeclare().getQueue();
+                channel.queueBind(queueName, RABBITMQ_EXCHANGE, "");
 
-            String queueName = channel.queueDeclare().getQueue();
-            channel.queueBind(queueName, RABBITMQ_EXCHANGE, "");
+                MyConsumer consumer = new MyConsumer(channel);
+                boolean autoack = true;
+                String tag = channel.basicConsume(queueName, autoack, consumer);
 
-            MyConsumer consumer = new MyConsumer(channel);
-            boolean autoack = true;
-            String tag = channel.basicConsume(queueName, autoack, consumer);
-
-            synchronized (this) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                waitThread();
+                channel.basicCancel(tag);
             }
-            channel.basicCancel(tag);
-            channel.close();
-
         } catch (IOException | TimeoutException e) {
-            e.printStackTrace();
+            // Exception
         }
+    }
 
+    public void waitThread() {
+        synchronized (this) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                // Exception
+            }
+        }
     }
 
     public synchronized void stop() {
@@ -67,7 +66,7 @@ public class KafkaConnector {
         @Override
         public void handleDelivery(String consumerTag, Envelope envelope,
                 AMQP.BasicProperties properties, byte[] body) throws IOException {
-            String message = new String(body, "UTF-8");
+            String message = new String(body, StandardCharsets.UTF_8);
             System.out.println("[Bridge -> Kafka] " + message);
 
             Properties kafkaProps = new Properties();
@@ -85,7 +84,7 @@ public class KafkaConnector {
 
     }
 
-    public static void main(String[] args) throws IOException, TimeoutException {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         KafkaConnector subscriber = new KafkaConnector();
         System.out.println("[Bridge] Waiting for messages from RabbitMQ...");

@@ -14,10 +14,8 @@ import okhttp3.Response;
 
 public class CheckMetadata {
 
-    final static String FILE = "./src/main/resources/metadata.txt";
-    final static String API_KEY = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
-    final static String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=" + API_KEY
-            + "&prevision=metadata";
+    static final String FILE = "./src/main/resources/metadata.txt";
+    static final String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=b3c5a6ce7d856ba4d2fa3ab1d238ab1c&prevision=metadata";
 
     public void suscribe() {
         Metadata metadata = getMetadata();
@@ -47,7 +45,7 @@ public class CheckMetadata {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Exception
         }
     }
 
@@ -62,12 +60,9 @@ public class CheckMetadata {
         try (Response response = client.newCall(request).execute()) {
             String body = response.body().string();
             ObjectMapper mapper = new ObjectMapper();
-            Metadata metadata = mapper.readTree(body).get(0).traverse(mapper).readValueAs(Metadata.class);
-
-            return metadata;
+            return mapper.readTree(body).get(0).traverse(mapper).readValueAs(Metadata.class);
 
         } catch (Exception e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -76,7 +71,11 @@ public class CheckMetadata {
         CheckMetadata cm = new CheckMetadata();
         cm.suscribe();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            UnsafeOkHttpClient.shutdown();
+            try {
+                UnsafeOkHttpClient.shutdown();
+            } catch (InterruptedException e) {
+                // Exception
+            }
         }));
         System.exit(0);
     }

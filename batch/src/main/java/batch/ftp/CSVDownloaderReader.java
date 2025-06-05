@@ -11,18 +11,19 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<String, String>>> {
-    private int inicio, fin;
+    private int inicio;
+    private int fin;
     private List<String> fileNames;
     private List<ConcurrentHashMap<String, String>> mapList;
 
-    final static String DOWNLOAD_PATH = "./src/main/resources/ftp/";
-    final static String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
+    static final String DOWNLOAD_PATH = "./src/main/resources/ftp/";
+    static final String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
 
     public CSVDownloaderReader(int inicio, int fin, List<String> fileNames) {
         this.inicio = inicio;
         this.fin = fin;
         this.fileNames = fileNames;
-        this.mapList = new ArrayList<ConcurrentHashMap<String, String>>();
+        this.mapList = new ArrayList<>();
     }
 
     @Override
@@ -55,8 +56,7 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // Exception
         }
 
     }
