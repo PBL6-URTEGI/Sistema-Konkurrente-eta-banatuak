@@ -19,8 +19,8 @@ import stream.common.model.EmbalseDato;
 public class Publisher {
     ConnectionFactory factory;
 
-    static String exchange;
-    static String senales;
+    private String exchange;
+    private String senales;
 
     static final String API_KEY = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
 
@@ -29,8 +29,8 @@ public class Publisher {
         factory.setHost("localhost");
         factory.setUsername("guest");
         factory.setPassword("guest");
-        Publisher.exchange = exchange;
-        Publisher.senales = senales;
+        this.exchange = exchange;
+        this.senales = senales;
     }
 
     public void suscribe() {

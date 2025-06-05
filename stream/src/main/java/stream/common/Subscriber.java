@@ -7,29 +7,31 @@ import org.apache.kafka.clients.producer.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
 public class Subscriber {
 
-    private static final String RABBITMQ_EXCHANGE = "stream_zona2";
-    private static final String KAFKA_TOPIC = "stream_zona2";
+    private String rabbitmqExchange;
+    private String kafkaTopic;
     ConnectionFactory factory;
 
-    public Subscriber() {
+    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ip) {
         factory = new ConnectionFactory();
-        factory.setHost("10.0.40.16");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setHost(ip);
+        factory.setUsername("rabbit");
+        factory.setPassword("rabbit");
+
+        this.rabbitmqExchange = rabbitmqExchange;
+        this.kafkaTopic = kafkaTopic;
     }
 
     public void suscribe() {
         try (Connection connection = factory.newConnection()) {
             try (Channel channel = connection.createChannel()) {
-                channel.exchangeDeclare(RABBITMQ_EXCHANGE, "fanout", true);
+                channel.exchangeDeclare(rabbitmqExchange, "fanout", true);
 
                 String queueName = channel.queueDeclare().getQueue();
-                channel.queueBind(queueName, RABBITMQ_EXCHANGE, "");
+                channel.queueBind(queueName, rabbitmqExchange, "");
 
                 MyConsumer consumer = new MyConsumer(channel);
                 boolean autoack = true;
@@ -76,7 +78,7 @@ public class Subscriber {
 
             KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(KAFKA_TOPIC, message);
+            ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, message);
             producer.send(record);
             producer.flush();
             producer.close();
