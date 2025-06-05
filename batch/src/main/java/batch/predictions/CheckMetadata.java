@@ -15,9 +15,9 @@ import okhttp3.Response;
 public class CheckMetadata {
 
     static final String FILE = "./src/main/resources/metadata.txt";
-    static final String API_URL = "https://www.saihebro.com/datos/apiopendata?apikey=b3c5a6ce7d856ba4d2fa3ab1d238ab1c&prevision=metadata";
+    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
 
-    public void suscribe() {
+    public void suscribe() throws IOException {
         Metadata metadata = getMetadata();
         File file = new File(FILE);
 
@@ -49,10 +49,17 @@ public class CheckMetadata {
         }
     }
 
-    public Metadata getMetadata() {
+    public static String getApiKey() throws IOException {
+        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    }
+
+    public Metadata getMetadata() throws IOException {
+        String apikey = getApiKey();
+        String url = "https://www.saihebro.com/datos/apiopendata?apikey=" + apikey + "&prevision=metadata";
+
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
         Request request = new Request.Builder()
-                .url(API_URL)
+                .url(url)
                 .get()
                 .addHeader("cache-control", "no-cache")
                 .build();
@@ -67,7 +74,7 @@ public class CheckMetadata {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         CheckMetadata cm = new CheckMetadata();
         cm.suscribe();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

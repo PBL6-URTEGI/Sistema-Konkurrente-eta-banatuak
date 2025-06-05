@@ -1,6 +1,8 @@
 package stream.common;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -22,7 +24,7 @@ public class Publisher {
     private String exchange;
     private String senales;
 
-    static final String API_KEY = "b3c5a6ce7d856ba4d2fa3ab1d238ab1c";
+    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
 
     public Publisher(String exchange, String senales) {
         factory = new ConnectionFactory();
@@ -33,7 +35,7 @@ public class Publisher {
         this.senales = senales;
     }
 
-    public void suscribe() {
+    public void suscribe() throws IOException {
         List<EmbalseDato> datos = recibirDatosAPI();
 
         try (Connection connection = factory.newConnection()) {
@@ -51,9 +53,14 @@ public class Publisher {
         }
     }
 
-    public List<EmbalseDato> recibirDatosAPI() {
+    public static String getApiKey() throws IOException {
+        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    }
+
+    public List<EmbalseDato> recibirDatosAPI() throws IOException {
+        String key = getApiKey();
         String url = "https://www.saihebro.com/datos/apiopendata?senal=" + senales + "&inicio=&apikey="
-                + API_KEY;
+                + key;
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();
         Request request = new Request.Builder()
                 .url(url)
