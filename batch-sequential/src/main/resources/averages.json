@@ -1,0 +1,905 @@
+[ {
+  "id_estacion" : "1264",
+  "caudal_rio" : "0.6311904761904745",
+  "nivel_rio" : "0.1962380952380946",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.466666666666665"
+}, {
+  "id_estacion" : "1186",
+  "caudal_rio" : "0.4251428571428553",
+  "nivel_rio" : "0.6949523809523837",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.236190476190465"
+}, {
+  "id_estacion" : "1262",
+  "caudal_rio" : "0.8697142857142877",
+  "nivel_rio" : "0.6232857142857167",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.648095238095234"
+}, {
+  "id_estacion" : "1382",
+  "caudal_rio" : "5.928285714285736",
+  "nivel_rio" : "0.43876190476190463",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.403333333333347"
+}, {
+  "id_estacion" : "1217",
+  "caudal_rio" : "1.3834285714285717",
+  "nivel_rio" : "0.13309523809523796",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.06952380952381"
+}, {
+  "id_estacion" : "1216",
+  "caudal_rio" : "2.7400000000000064",
+  "nivel_rio" : "0.21999999999999936",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "16.944285714285723",
+  "temperatura" : "20.415238095238102"
+}, {
+  "id_estacion" : "1414",
+  "caudal_rio" : "6.2731428571428385",
+  "nivel_rio" : "1.6165714285714352",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.036666666666676",
+  "temperatura" : "20.473333333333354"
+}, {
+  "id_estacion" : "1215",
+  "caudal_rio" : "2.6269999999999993",
+  "nivel_rio" : "0.9367142857142855",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.974761904761895"
+}, {
+  "id_estacion" : "1335",
+  "caudal_rio" : "2.044809523809516",
+  "nivel_rio" : "0.7911904761904763",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.09190476190476"
+}, {
+  "id_estacion" : "1378",
+  "caudal_rio" : "1.9319523809523897",
+  "nivel_rio" : "0.2835238095238102",
+  "temperatura" : "18.2557142857143"
+}, {
+  "id_estacion" : "1256",
+  "caudal_rio" : "1.0040476190476197",
+  "nivel_rio" : "0.9086190476190465",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.913809523809533"
+}, {
+  "id_estacion" : "1178",
+  "caudal_rio" : "4.388904761904764",
+  "nivel_rio" : "1.362285714285719",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.427619047619043"
+}, {
+  "id_estacion" : "1299",
+  "caudal_rio" : "7.313761904761895",
+  "nivel_rio" : "0.38352380952380855"
+}, {
+  "id_estacion" : "1332",
+  "caudal_rio" : "2.294285714285715",
+  "nivel_rio" : "0.9873333333333303",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.867619047619058"
+}, {
+  "id_estacion" : "1331",
+  "caudal_rio" : "0.6359047619047623",
+  "nivel_rio" : "0.6182380952380964",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.263809523809527"
+}, {
+  "id_estacion" : "1375",
+  "caudal_rio" : "3.9649999999999883",
+  "nivel_rio" : "1.324285714285709",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.231904761904765"
+}, {
+  "id_estacion" : "1339",
+  "caudal_rio" : "3.7115238095238166",
+  "nivel_rio" : "0.4256666666666666",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "16.02761904761905",
+  "temperatura" : "19.21428571428572"
+}, {
+  "id_estacion" : "1274",
+  "caudal_rio" : "1.5914285714285699",
+  "nivel_rio" : "1.1224285714285722",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.779047619047624"
+}, {
+  "id_estacion" : "1395",
+  "caudal_rio" : "6.278999999999982",
+  "nivel_rio" : "0.7563333333333343",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.168571428571433",
+  "temperatura" : "17.26428571428571"
+}, {
+  "id_estacion" : "1305",
+  "caudal_rio" : "0.8183809523809535",
+  "nivel_rio" : "0.4160476190476184",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.49142857142859"
+}, {
+  "id_estacion" : "1349",
+  "caudal_rio" : "8.624190476190458",
+  "nivel_rio" : "1.3718095238095263",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.977619047619058"
+}, {
+  "id_estacion" : "1426",
+  "caudal_rio" : "4.765285714285689",
+  "nivel_rio" : "1.54357142857143",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.848571428571436"
+}, {
+  "id_estacion" : "1106",
+  "caudal_rio" : "13.637952380952418",
+  "nivel_rio" : "1.3393333333333324",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.83000000000002"
+}, {
+  "id_estacion" : "1304",
+  "caudal_rio" : "0.23847619047619054",
+  "nivel_rio" : "0.14904761904761865",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.629523809523796",
+  "temperatura" : "18.58380952380954"
+}, {
+  "id_estacion" : "1348",
+  "caudal_rio" : "0.7860000000000003",
+  "nivel_rio" : "0.5988095238095253"
+}, {
+  "id_estacion" : "1105",
+  "caudal_rio" : "7.156666666666641",
+  "nivel_rio" : "1.7138095238095201",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.052380952380975"
+}, {
+  "id_estacion" : "1303",
+  "caudal_rio" : "4.7910476190476015",
+  "nivel_rio" : "1.3042380952380985",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.15428571428572"
+}, {
+  "id_estacion" : "1424",
+  "caudal_rio" : "3.360000000000011",
+  "nivel_rio" : "0.2999999999999988",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.21571428571428"
+}, {
+  "id_estacion" : "1302",
+  "caudal_rio" : "6.195142857142851",
+  "nivel_rio" : "0.29095238095238024",
+  "temperatura" : "18.550476190476196"
+}, {
+  "id_estacion" : "1268",
+  "caudal_rio" : "4.872857142857142",
+  "nivel_rio" : "0.35695238095238013",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.444285714285716"
+}, {
+  "id_estacion" : "1301",
+  "caudal_rio" : "5.822714285714277",
+  "nivel_rio" : "1.3173333333333315"
+}, {
+  "id_estacion" : "1300",
+  "caudal_rio" : "15.914333333333346",
+  "nivel_rio" : "1.3492380952381002"
+}, {
+  "id_estacion" : "1344",
+  "caudal_rio" : "0.16342857142857128",
+  "nivel_rio" : "0.40447619047619116",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.148571428571428",
+  "temperatura" : "18.678571428571434"
+}, {
+  "id_estacion" : "1343",
+  "caudal_rio" : "2.343666666666664",
+  "nivel_rio" : "0.22890476190476147",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "16.526666666666674",
+  "temperatura" : "17.528571428571425"
+}, {
+  "id_estacion" : "1067",
+  "caudal_rio" : "2.718608695652171",
+  "nivel_rio" : "0.766086956521741",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.10173913043478"
+}, {
+  "id_estacion" : "1100",
+  "caudal_rio" : "5.255476190476178",
+  "nivel_rio" : "1.098095238095236",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.640952380952406"
+}, {
+  "id_estacion" : "1265",
+  "caudal_rio" : "1.9386190476190477",
+  "nivel_rio" : "0.4278571428571427"
+}, {
+  "id_estacion" : "1342",
+  "caudal_rio" : "0.43285714285714133",
+  "nivel_rio" : "0.2400000000000003",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "14.827619047619047",
+  "temperatura" : "18.71238095238095"
+}, {
+  "id_estacion" : "1429",
+  "caudal_rio" : "0.9030952380952354",
+  "nivel_rio" : "0.7017619047619035",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.057142857142853"
+}, {
+  "id_estacion" : "1428",
+  "caudal_rio" : "12.619714285714316",
+  "nivel_rio" : "1.1077619047619043",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.619999999999994"
+}, {
+  "id_estacion" : "1306",
+  "caudal_rio" : "0.22871428571428562",
+  "nivel_rio" : "0.9562380952380894",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.927142857142842",
+  "temperatura" : "19.439523809523823"
+}, {
+  "id_estacion" : "1427",
+  "caudal_rio" : "11.631571428571382",
+  "nivel_rio" : "0.6598571428571404"
+}, {
+  "id_estacion" : "1242",
+  "caudal_rio" : "NaN",
+  "nivel_rio" : "0.1331428571428569",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.720952380952372"
+}, {
+  "id_estacion" : "1363",
+  "caudal_rio" : "2.499285714285716",
+  "nivel_rio" : "0.21304761904761926",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.403809523809546"
+}, {
+  "id_estacion" : "1164",
+  "caudal_rio" : "0.6198536585365865",
+  "nivel_rio" : "0.47565853658536433"
+}, {
+  "id_estacion" : "1285",
+  "caudal_rio" : "1.0830952380952357",
+  "nivel_rio" : "0.3837619047619047",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.85714285714287"
+}, {
+  "id_estacion" : "1163",
+  "caudal_rio" : "2.3820476190476128",
+  "nivel_rio" : "1.2244761904761936",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.110952380952387"
+}, {
+  "id_estacion" : "1240",
+  "caudal_rio" : "9.925714285714317",
+  "nivel_rio" : "1.080142857142861",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "16.464285714285733",
+  "temperatura" : "20.47714285714285"
+}, {
+  "id_estacion" : "1361",
+  "caudal_rio" : "2.3237142857142796",
+  "nivel_rio" : "0.6840000000000017",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.202857142857145"
+}, {
+  "id_estacion" : "1360",
+  "caudal_rio" : "31.72085714285718",
+  "nivel_rio" : "0.9249047619047609",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.254285714285722",
+  "temperatura" : "20.790476190476188"
+}, {
+  "id_estacion" : "1281",
+  "caudal_rio" : "0.1939047619047615",
+  "nivel_rio" : "0.4069999999999995",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.90809523809525"
+}, {
+  "id_estacion" : "1081",
+  "caudal_rio" : "13.056714285714305",
+  "nivel_rio" : "0.5632857142857136",
+  "precipitacion" : "0.0",
+  "temperatura" : "21.171428571428553"
+}, {
+  "id_estacion" : "1359",
+  "caudal_rio" : "51.87033333333322",
+  "nivel_rio" : "1.7328571428571442",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.22857142857142"
+}, {
+  "id_estacion" : "1237",
+  "caudal_rio" : "4.90919047619046",
+  "nivel_rio" : "0.9526190476190455",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.466666666666665"
+}, {
+  "id_estacion" : "1358",
+  "caudal_rio" : "2.1091904761904825",
+  "nivel_rio" : "0.5239523809523808",
+  "temperatura" : "19.934761904761903"
+}, {
+  "id_estacion" : "1277",
+  "caudal_rio" : "1.050047619047622",
+  "nivel_rio" : "0.6518095238095221"
+}, {
+  "id_estacion" : "1354",
+  "caudal_rio" : "20.223142857142822",
+  "nivel_rio" : "1.454095238095235",
+  "precipitacion" : "0.0",
+  "temperatura" : "21.864285714285717"
+}, {
+  "id_estacion" : "1398",
+  "caudal_rio" : "0.898857142857146",
+  "nivel_rio" : "0.569809523809521",
+  "temperatura" : "16.992857142857133"
+}, {
+  "id_estacion" : "1276",
+  "caudal_rio" : "9.849952380952384",
+  "nivel_rio" : "1.0929523809523818",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.15000000000001"
+}, {
+  "id_estacion" : "1353",
+  "caudal_rio" : "7.152952380952353",
+  "nivel_rio" : "0.640285714285714"
+}, {
+  "id_estacion" : "1397",
+  "caudal_rio" : "0.517857142857144",
+  "nivel_rio" : "1.2771904761904807",
+  "precipitacion" : "0.0",
+  "temperatura" : "16.971428571428582"
+}, {
+  "id_estacion" : "1330",
+  "caudal_rio" : "0.5",
+  "nivel_rio" : "0.35999999999999954",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.823809523809537"
+}, {
+  "id_estacion" : "1374",
+  "caudal_rio" : "1.8590476190476113",
+  "nivel_rio" : "1.5810476190476197"
+}, {
+  "id_estacion" : "1252",
+  "caudal_rio" : "0.7971428571428538",
+  "nivel_rio" : "0.30619047619047546",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "12.03761904761903",
+  "temperatura" : "15.189523809523815"
+}, {
+  "id_estacion" : "1296",
+  "caudal_rio" : "0.2646666666666662",
+  "nivel_rio" : "0.4403809523809511",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.823333333333318"
+}, {
+  "id_estacion" : "1295",
+  "caudal_rio" : "7.6504285714285585",
+  "nivel_rio" : "1.7239523809523785"
+}, {
+  "id_estacion" : "1372",
+  "caudal_rio" : "17.03638095238086",
+  "nivel_rio" : "1.333952380952381"
+}, {
+  "id_estacion" : "1294",
+  "caudal_rio" : "1.4672380952380926",
+  "nivel_rio" : "0.4920952380952362",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.281428571428567"
+}, {
+  "id_estacion" : "1293",
+  "caudal_rio" : "7.23614285714286",
+  "nivel_rio" : "0.840571428571432",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.50666666666667"
+}, {
+  "id_estacion" : "1370",
+  "caudal_rio" : "81.2172380952379",
+  "nivel_rio" : "3.3258571428571373",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.533333333333324"
+}, {
+  "id_estacion" : "1292",
+  "caudal_rio" : "11.56880952380956",
+  "nivel_rio" : "0.6361428571428583",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.97142857142859"
+}, {
+  "id_estacion" : "1404",
+  "caudal_rio" : "9.609999999999957",
+  "nivel_rio" : "0.46999999999999914",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "12.928095238095242",
+  "temperatura" : "18.4757142857143"
+}, {
+  "id_estacion" : "1205",
+  "caudal_rio" : "0.501",
+  "nivel_rio" : "0.1770476190476188",
+  "temperatura" : "16.98238095238095"
+}, {
+  "id_estacion" : "1204",
+  "caudal_rio" : "0.15999999999999995",
+  "nivel_rio" : "1.0399999999999985",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.580952380952375"
+}, {
+  "id_estacion" : "1402",
+  "caudal_rio" : "1.5",
+  "nivel_rio" : "0.4300000000000018",
+  "precipitacion" : "0.0",
+  "temperatura" : "16.197619047619046"
+}, {
+  "id_estacion" : "1368",
+  "caudal_rio" : "29.209761904761947",
+  "nivel_rio" : "1.2678095238095235",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.45523809523811"
+}, {
+  "id_estacion" : "1401",
+  "caudal_rio" : "2.9710476190476283",
+  "nivel_rio" : "0.9592857142857145"
+}, {
+  "id_estacion" : "1202",
+  "caudal_rio" : "0.8229047619047574",
+  "nivel_rio" : "0.3796190476190487",
+  "precipitacion" : "0.0",
+  "temperatura" : "21.92095238095237"
+}, {
+  "id_estacion" : "1367",
+  "caudal_rio" : "14.49047619047628",
+  "nivel_rio" : "1.621476190476197",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.16190476190477"
+}, {
+  "id_estacion" : "1201",
+  "caudal_rio" : "4.454571428571427",
+  "nivel_rio" : "0.7055238095238074",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.334285714285706"
+}, {
+  "id_estacion" : "1366",
+  "caudal_rio" : "9.8687619047619",
+  "nivel_rio" : "0.5940952380952371"
+}, {
+  "id_estacion" : "1244",
+  "caudal_rio" : "5.538714285714309",
+  "nivel_rio" : "1.2127142857142876",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.19619047619048",
+  "temperatura" : "18.830476190476194"
+}, {
+  "id_estacion" : "1407",
+  "caudal_rio" : "11.424000000000039",
+  "nivel_rio" : "1.2190476190476178"
+}, {
+  "id_estacion" : "1329",
+  "caudal_rio" : "1.2591428571428571",
+  "nivel_rio" : "0.28352380952381007",
+  "precipitacion" : "0.0",
+  "temperatura" : "16.023333333333344"
+}, {
+  "id_estacion" : "1207",
+  "caudal_rio" : "0.694666666666665",
+  "nivel_rio" : "0.7003333333333336"
+}, {
+  "id_estacion" : "1405",
+  "caudal_rio" : "27.4141428571428",
+  "nivel_rio" : "2.473714285714292"
+}, {
+  "id_estacion" : "1340",
+  "nivel_embalse" : "74.82866666666669",
+  "nivel_embalse_visor" : "74.82866666666669",
+  "porcentaje_llenado_embalse" : "77.9188020833333",
+  "porcentaje_llenado_embalse_visor" : "77.9188020833333",
+  "volumen_embalse" : "0.9132291666666665",
+  "volumen_embalse_visor" : "0.9132291666666665"
+}, {
+  "id_estacion" : "1362",
+  "nivel_embalse" : "4.4597916666666775",
+  "volumen_embalse" : "0.016822916666666608"
+}, {
+  "id_estacion" : "1337",
+  "nivel_embalse" : "75.91909523809525",
+  "nivel_embalse_visor" : "75.91909523809525",
+  "porcentaje_llenado_embalse" : "70.51718750000002",
+  "porcentaje_llenado_embalse_visor" : "70.51718750000002",
+  "volumen_embalse" : "0.3752604166666667",
+  "volumen_embalse_visor" : "0.3752604166666667"
+}, {
+  "id_estacion" : "1334",
+  "nivel_embalse" : "378.8975238095231",
+  "nivel_embalse_visor" : "379.44286458333323",
+  "porcentaje_llenado_embalse" : "79.33152380952386",
+  "porcentaje_llenado_embalse_visor" : "82.68406249999998",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.42761904761906",
+  "volumen_embalse" : "3.3994285714285652",
+  "volumen_embalse_visor" : "3.541302083333326"
+}, {
+  "id_estacion" : "1356",
+  "nivel_embalse" : "209.29661904761892",
+  "nivel_embalse_visor" : "209.6351562500001",
+  "porcentaje_llenado_embalse" : "92.21197916666664",
+  "porcentaje_llenado_embalse_visor" : "92.21197916666664",
+  "volumen_embalse" : "30.57312499999999",
+  "volumen_embalse_visor" : "30.57312499999999"
+}, {
+  "id_estacion" : "1333",
+  "nivel_embalse" : "490.06523809523776",
+  "nivel_embalse_visor" : "490.5255729166668",
+  "porcentaje_llenado_embalse" : "98.03031250000008",
+  "porcentaje_llenado_embalse_visor" : "98.03031250000008",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.0057142857143",
+  "volumen_embalse" : "32.617968749999996",
+  "volumen_embalse_visor" : "32.617968749999996"
+}, {
+  "id_estacion" : "1355",
+  "nivel_embalse" : "245.35604761904722",
+  "nivel_embalse_visor" : "245.35604761904722"
+}, {
+  "id_estacion" : "1079",
+  "nivel_embalse" : "283.75428571428415",
+  "nivel_embalse_visor" : "283.75428571428415",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.30952380952382"
+}, {
+  "id_estacion" : "1255",
+  "nivel_embalse" : "442.9864761904762",
+  "nivel_embalse_visor" : "443.383774509804",
+  "porcentaje_llenado_embalse" : "11.865904761904766",
+  "porcentaje_llenado_embalse_visor" : "30.759362745098056",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.08619047619049",
+  "volumen_embalse" : "0.009999999999999997",
+  "volumen_embalse_visor" : "0.010000000000000002"
+}, {
+  "id_estacion" : "1078",
+  "nivel_embalse" : "168.01290476190505",
+  "nivel_embalse_visor" : "168.01290476190505",
+  "porcentaje_llenado_embalse" : "98.25495238095257",
+  "porcentaje_llenado_embalse_visor" : "98.25495238095257",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.47571428571427",
+  "volumen_embalse" : "7.450238095238128",
+  "volumen_embalse_visor" : "7.450238095238128"
+}, {
+  "id_estacion" : "1177",
+  "nivel_embalse" : "305.339428571428",
+  "nivel_embalse_visor" : "305.339428571428",
+  "porcentaje_llenado_embalse" : "83.94119047619051",
+  "porcentaje_llenado_embalse_visor" : "83.94119047619051",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.25428571428573",
+  "volumen_embalse" : "18.61899999999998",
+  "volumen_embalse_visor" : "18.61899999999998"
+}, {
+  "id_estacion" : "1232",
+  "nivel_embalse" : "1140.2977941176466",
+  "nivel_embalse_visor" : "1140.3030693069302",
+  "porcentaje_llenado_embalse" : "26.71235294117647",
+  "porcentaje_llenado_embalse_visor" : "26.805024630541862",
+  "volumen_embalse" : "2.7213235294117646",
+  "volumen_embalse_visor" : "2.7304433497536937"
+}, {
+  "id_estacion" : "1254",
+  "nivel_embalse" : "102.38999999999997",
+  "nivel_embalse_visor" : "102.6650980392158",
+  "porcentaje_llenado_embalse" : "40.069666666666755",
+  "porcentaje_llenado_embalse_visor" : "59.08406862745096",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.251428571428583",
+  "volumen_embalse" : "0.7182380952380935",
+  "volumen_embalse_visor" : "0.7680392156862752"
+}, {
+  "id_estacion" : "1231",
+  "nivel_embalse" : "840.3326666666665",
+  "nivel_embalse_visor" : "840.4786274509803",
+  "porcentaje_llenado_embalse" : "101.19872549019607",
+  "porcentaje_llenado_embalse_visor" : "101.19872549019607",
+  "precipitacion" : "0.0",
+  "temperatura" : "14.728571428571422",
+  "volumen_embalse" : "18.99583333333333",
+  "volumen_embalse_visor" : "21.717549019607844"
+}, {
+  "id_estacion" : "1253",
+  "nivel_embalse" : "771.6468095238095",
+  "nivel_embalse_visor" : "771.9059803921567",
+  "porcentaje_llenado_embalse" : "75.76557142857153",
+  "porcentaje_llenado_embalse_visor" : "74.0375980392159",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.508571428571432",
+  "volumen_embalse" : "8.652238095238133",
+  "volumen_embalse_visor" : "8.734068627450997"
+}, {
+  "id_estacion" : "1272",
+  "nivel_embalse" : "895.0268571428571",
+  "nivel_embalse_visor" : "895.0229411764706",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.348095238095231"
+}, {
+  "id_estacion" : "1346",
+  "nivel_embalse" : "331.02309523809504",
+  "nivel_embalse_visor" : "331.00536458333335",
+  "porcentaje_llenado_embalse_visor" : "54.89848958333332",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.442380952380955",
+  "volumen_embalse_visor" : "0.4017708333333329"
+}, {
+  "id_estacion" : "1345",
+  "nivel_embalse" : "402.2115714285711",
+  "nivel_embalse_visor" : "402.2115714285711",
+  "porcentaje_llenado_embalse" : "86.32485714285717",
+  "porcentaje_llenado_embalse_visor" : "86.32485714285717",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.195714285714278",
+  "volumen_embalse" : "7.040666666666648",
+  "volumen_embalse_visor" : "7.040666666666648"
+}, {
+  "id_estacion" : "1364",
+  "nivel_embalse" : "11.982343749999997",
+  "volumen_embalse" : "3.1147916666666755"
+}, {
+  "id_estacion" : "1409",
+  "nivel_embalse" : "31.98157142857137",
+  "nivel_embalse_visor" : "31.924215686274493",
+  "porcentaje_llenado_embalse" : "91.07504901960775",
+  "porcentaje_llenado_embalse_visor" : "91.07504901960775",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.517142857142872",
+  "volumen_embalse" : "36.791225490196084",
+  "volumen_embalse_visor" : "36.791225490196084"
+}, {
+  "id_estacion" : "1408",
+  "nivel_embalse" : "106.42861904761916",
+  "nivel_embalse_visor" : "106.18759803921576",
+  "porcentaje_llenado_embalse" : "89.6187745098039",
+  "porcentaje_llenado_embalse_visor" : "89.6187745098039",
+  "volumen_embalse" : "86.46637254901971",
+  "volumen_embalse_visor" : "86.46637254901971"
+}, {
+  "id_estacion" : "1847",
+  "nivel_embalse" : "244.44999999999928",
+  "nivel_embalse_visor" : "244.42822916666663",
+  "porcentaje_llenado_embalse" : "98.12999999999992",
+  "porcentaje_llenado_embalse_visor" : "99.08953125000018",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.006190476190497",
+  "volumen_embalse" : "5.0",
+  "volumen_embalse_visor" : "5.049999999999983"
+}, {
+  "id_estacion" : "1406",
+  "nivel_embalse" : "219.68052380952406",
+  "nivel_embalse_visor" : "220.95020833333285",
+  "porcentaje_llenado_embalse" : "89.22890624999998",
+  "porcentaje_llenado_embalse_visor" : "89.22890624999998",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.02333333333336",
+  "volumen_embalse" : "212.1861979166666",
+  "volumen_embalse_visor" : "212.1861979166666"
+}, {
+  "id_estacion" : "1108",
+  "nivel_embalse" : "151.09976190476232",
+  "nivel_embalse_visor" : "151.1665789473686",
+  "porcentaje_llenado_embalse" : "80.97585714285714",
+  "porcentaje_llenado_embalse_visor" : "81.22631578947386",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.993333333333354",
+  "volumen_embalse" : "30.185380952381063",
+  "volumen_embalse_visor" : "30.282052631579024"
+}, {
+  "id_estacion" : "1066",
+  "nivel_rio" : "0.4029047619047618",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.659999999999997"
+}, {
+  "id_estacion" : "1065",
+  "nivel_rio" : "0.24809523809523826",
+  "temperatura" : "18.893809523809523"
+}, {
+  "id_estacion" : "1064",
+  "nivel_rio" : "0.40385714285714097",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.72619047619047"
+}, {
+  "id_estacion" : "1185",
+  "nivel_rio" : "0.9176190476190467",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.191428571428595"
+}, {
+  "id_estacion" : "1063",
+  "nivel_rio" : "0.9788095238095216",
+  "precipitacion" : "0.0"
+}, {
+  "id_estacion" : "1062",
+  "nivel_rio" : "0.9311904761904795"
+}, {
+  "id_estacion" : "1061",
+  "nivel_rio" : "0.334095238095238",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.490476190476187"
+}, {
+  "id_estacion" : "1060",
+  "nivel_rio" : "0.6975238095238111",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.783333333333324"
+}, {
+  "id_estacion" : "1338",
+  "nivel_rio" : "0.8629999999999989",
+  "temperatura_agua" : "16.6404761904762"
+}, {
+  "id_estacion" : "1214",
+  "nivel_rio" : "1.2428095238095223",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.38095238095239"
+}, {
+  "id_estacion" : "1298",
+  "nivel_rio" : "0.17400000000000063",
+  "precipitacion" : "0.0",
+  "temperatura" : "13.096190476190475"
+}, {
+  "id_estacion" : "1219",
+  "nivel_rio" : "0.6780000000000038",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.28428571428571"
+}, {
+  "id_estacion" : "1218",
+  "nivel_rio" : "0.27293532338308485"
+}, {
+  "id_estacion" : "1197",
+  "nivel_rio" : "0.9199999999999968",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.269047619047605"
+}, {
+  "id_estacion" : "1196",
+  "nivel_rio" : "0.9199999999999968",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.269047619047605"
+}, {
+  "id_estacion" : "1074",
+  "nivel_rio" : "0.7140952380952363",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.768571428571434"
+}, {
+  "id_estacion" : "1193",
+  "nivel_rio" : "0.3803809523809524",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.49285714285714"
+}, {
+  "id_estacion" : "1347",
+  "nivel_rio" : "1.2157619047619077",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.35714285714284"
+}, {
+  "id_estacion" : "1115",
+  "nivel_rio" : "0.6396666666666662",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.188571428571443"
+}, {
+  "id_estacion" : "1235",
+  "nivel_rio" : "1.5476666666666732",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.45095238095239"
+}, {
+  "id_estacion" : "1373",
+  "nivel_rio" : "1.490761904761903"
+}, {
+  "id_estacion" : "1371",
+  "nivel_rio" : "0.7837619047619078",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.42904761904763"
+}, {
+  "id_estacion" : "1248",
+  "nivel_rio" : "0.4604285714285699",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.808571428571433"
+}, {
+  "id_estacion" : "1247",
+  "nivel_rio" : "0.4400000000000015",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.259047619047625"
+}, {
+  "id_estacion" : "1245",
+  "nivel_rio" : "0.818238095238093"
+}, {
+  "id_estacion" : "1379",
+  "nivel_rio" : "0.33680952380952406",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.779047619047613"
+}, {
+  "id_estacion" : "1376",
+  "nivel_rio" : "0.9289999999999992",
+  "temperatura_agua" : "6.0"
+}, {
+  "id_estacion" : "1396",
+  "nivel_rio" : "0.5743809523809491"
+}, {
+  "id_estacion" : "1269",
+  "nivel_rio" : "1.3065238095238076"
+}, {
+  "id_estacion" : "1307",
+  "nivel_rio" : "0.9990000000000009",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.678571428571434"
+}, {
+  "id_estacion" : "1165",
+  "nivel_rio" : "0.6849523809523829",
+  "precipitacion" : "0.0",
+  "temperatura" : "20.521904761904754"
+}, {
+  "id_estacion" : "1399",
+  "nivel_rio" : "1.4565714285714293",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.7652380952381"
+}, {
+  "id_estacion" : "1297",
+  "nivel_rio" : "1.3778571428571413",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "10.248095238095235",
+  "temperatura" : "17.53761904761904"
+}, {
+  "id_estacion" : "1206",
+  "nivel_rio" : "0.8057619047619058",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.97809523809524"
+}, {
+  "id_estacion" : "1166",
+  "nivel_rio" : "1.6544285714285674",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "16.976666666666674",
+  "temperatura" : "21.04571428571428"
+}, {
+  "id_estacion" : "1208",
+  "nivel_rio" : "0.4709047619047608",
+  "precipitacion" : "0.0",
+  "temperatura_agua" : "15.272380952380967",
+  "temperatura" : "19.37714285714286"
+}, {
+  "id_estacion" : "P668",
+  "precipitacion" : "0.0",
+  "temperatura" : "18.844761904761896"
+}, {
+  "id_estacion" : "P030",
+  "precipitacion" : "0.0",
+  "temperatura" : "13.21761904761905"
+}, {
+  "id_estacion" : "P032",
+  "precipitacion" : "0.0",
+  "temperatura" : "17.814761904761923"
+}, {
+  "id_estacion" : "1352",
+  "precipitacion" : "0.0",
+  "temperatura" : "19.875238095238096"
+}, {
+  "id_estacion" : "P045",
+  "precipitacion" : "0.0",
+  "temperatura" : "14.088095238095235"
+}, {
+  "id_estacion" : "P037",
+  "precipitacion" : "0.0",
+  "temperatura" : "11.579523809523817"
+}, {
+  "id_estacion" : "1246",
+  "precipitacion" : "0.0",
+  "temperatura" : "16.79428571428571"
+}, {
+  "id_estacion" : "P070",
+  "precipitacion" : "0.0",
+  "temperatura" : "16.927619047619046"
+}, {
+  "id_estacion" : "P072",
+  "precipitacion" : "0.0",
+  "temperatura" : "12.4"
+}, {
+  "id_estacion" : "P071",
+  "precipitacion" : "0.0",
+  "temperatura" : "15.133333333333338"
+}, {
+  "id_estacion" : "P080",
+  "precipitacion" : "0.0",
+  "temperatura" : "10.081428571428571"
+} ]
