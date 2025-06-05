@@ -1,4 +1,4 @@
-package stream.zona2.subscriber;
+package stream.common;
 
 import com.rabbitmq.client.*;
 
@@ -10,13 +10,13 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
-public class KafkaConnector {
+public class Subscriber {
 
     private static final String RABBITMQ_EXCHANGE = "stream_zona2";
     private static final String KAFKA_TOPIC = "stream_zona2";
     ConnectionFactory factory;
 
-    public KafkaConnector() {
+    public Subscriber() {
         factory = new ConnectionFactory();
         factory.setHost("10.0.40.16");
         factory.setUsername("guest");
@@ -82,18 +82,5 @@ public class KafkaConnector {
             producer.close();
         }
 
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        KafkaConnector subscriber = new KafkaConnector();
-        System.out.println("[Bridge] Waiting for messages from RabbitMQ...");
-        Thread waitThread = new Thread(() -> {
-            scanner.nextLine();
-            subscriber.stop();
-        });
-        waitThread.start();
-        subscriber.suscribe();
-        scanner.close();
     }
 }
