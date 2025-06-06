@@ -16,6 +16,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import stream.common.UnsafeOkHttpClient.UnsafeClientInitializationException;
 import stream.common.model.EmbalseDato;
 
 public class Publisher {
@@ -25,10 +26,10 @@ public class Publisher {
     private String senales;
 
     static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
-    static final String RABBITMQ_PASSWORD_PATH = "./src/main/resources/credentials/guest.txt";
+    static final String RABBITMQ_PATH = "./src/main/resources/credentials/guest.txt";
 
     public Publisher(String exchange, String senales) throws IOException {
-        String key = getKey(RABBITMQ_PASSWORD_PATH);
+        String key = getKey(RABBITMQ_PATH);
 
         factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -38,7 +39,7 @@ public class Publisher {
         this.senales = senales;
     }
 
-    public void suscribe() throws IOException {
+    public void suscribe() throws Exception {
         List<EmbalseDato> datos = recibirDatosAPI();
 
         try (Connection connection = factory.newConnection()) {
@@ -60,7 +61,7 @@ public class Publisher {
         return new String(Files.readAllBytes(Paths.get(path)));
     }
 
-    public List<EmbalseDato> recibirDatosAPI() throws IOException {
+    public List<EmbalseDato> recibirDatosAPI() throws UnsafeClientInitializationException, IOException {
         String key = getKey(API_KEY_PATH);
         String url = "https://www.saihebro.com/datos/apiopendata?senal=" + senales + "&inicio=&apikey="
                 + key;

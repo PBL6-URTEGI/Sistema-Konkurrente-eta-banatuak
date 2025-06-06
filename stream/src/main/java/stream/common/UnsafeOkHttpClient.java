@@ -17,7 +17,7 @@ public class UnsafeOkHttpClient {
 
     private UnsafeOkHttpClient() {}
 
-    public static OkHttpClient getUnsafeClient() {
+    public static OkHttpClient getUnsafeClient() throws UnsafeClientInitializationException {
         if (client == null) {
             try {
                 // Trust all certs (insecure, for testing only)
@@ -47,7 +47,7 @@ public class UnsafeOkHttpClient {
                         .build();
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new UnsafeClientInitializationException("Failed to initialize unsafe OkHttpClient", e);
             }
         }
         return client;
@@ -73,4 +73,10 @@ public class UnsafeOkHttpClient {
             }
         }
     }
+
+    public static class UnsafeClientInitializationException extends Exception {
+    public UnsafeClientInitializationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
 }

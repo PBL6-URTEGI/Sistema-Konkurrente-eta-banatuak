@@ -17,11 +17,11 @@ public class Subscriber {
     private String kafkaTopic;
     ConnectionFactory factory;
 
-    static final String RABBITMQ_PASSWORD_PATH = "./src/main/resources/credentials/rabbit.txt";
+    static final String RABBITMQ_PATH = "./src/main/resources/credentials/rabbit.txt";
 
-    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ip_path) throws IOException {
-        String key = getKey(RABBITMQ_PASSWORD_PATH);
-        String ip = getKey(ip_path);
+    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ipPath) throws IOException {
+        String key = getKey(RABBITMQ_PATH);
+        String ip = getKey(ipPath);
 
         factory = new ConnectionFactory();
         factory.setHost(ip);
@@ -88,8 +88,8 @@ public class Subscriber {
 
             KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(kafkaTopic, message);
-            producer.send(record);
+            ProducerRecord<String, String> rec = new ProducerRecord<>(kafkaTopic, message);
+            producer.send(rec);
             producer.flush();
             producer.close();
         }
