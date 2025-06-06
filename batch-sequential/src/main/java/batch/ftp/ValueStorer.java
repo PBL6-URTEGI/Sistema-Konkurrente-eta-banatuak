@@ -38,6 +38,7 @@ public class ValueStorer {
     }
 
     public void calculateAverage() {
+        
         List<String> titles = values.get(title);
         averages.put(title, titles.get(0));
 

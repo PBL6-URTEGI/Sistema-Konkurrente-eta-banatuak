@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import batch.ftp.CSVDownloaderReader;
 import batch.predictions.model.DatosWrapper;
 import batch.predictions.model.Prediction;
 
@@ -25,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ReceivePrediction {
 
-    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
+    static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
 
     public ReceivePrediction() throws InterruptedException, IOException {
         List<Prediction> predictions = getPredictions();
@@ -84,12 +83,12 @@ public class ReceivePrediction {
         }
     }
 
-    public static String getApiKey() throws IOException {
-        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    public static String getKey(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     public List<Prediction> getPredictions() throws IOException {
-        String apikey = getApiKey();
+        String apikey = getKey(API_KEY_PATH);
         String url = "https://www.saihebro.com/datos/apiopendata?apikey=" + apikey + "&prevision=prevision_completa";
 
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();

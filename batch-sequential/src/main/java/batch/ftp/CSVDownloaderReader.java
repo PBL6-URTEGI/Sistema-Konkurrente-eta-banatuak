@@ -35,12 +35,12 @@ public class CSVDownloaderReader {
         for (String fileName : fileNames) {
             Map<String, List<String>> map = new HashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);
-
+            
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
             String remoteFile = prefix + fileName + DOWNLOAD_APPENDIX;
             String localFilePath = DOWNLOAD_PATH + remoteFile;
             File localFile = new File(localFilePath);
-
+            
             readFile(localFile, valueStorer, fileName);
             valueStorer.calculateAverage();
 

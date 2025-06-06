@@ -48,9 +48,9 @@ public class ConnectToServer {
                     String remoteFile = prefix + fileName + DOWNLOAD_APPENDIX;
                     String localFilePath = DOWNLOAD_PATH + remoteFile;
                     File localFile = new File(localFilePath);
-                    csvReader.downloadFile(remoteFile, localFilePath, localFile, ftpClient);
+                    csvReader.downloadFile("/Processed/" + remoteFile, localFilePath, localFile, ftpClient);
                 }
-
+                
                 readFiles();
                 ftpClient.logout();
             } else {

@@ -32,6 +32,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ConnectToServer {
     static final String DOWNLOAD_PATH = "./src/main/resources/ftp/";
+    static final String FTP_PATH = "./src/main/resources/credentials/ftp.txt";
+    static final String FTP_SERVER_PATH = "./src/main/resources/credentials/server.txt";
     static final String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
     static final List<String> DOWNLOAD_FILENAMES = Arrays.asList(
             "caudal_rio", "nivel_embalse", "nivel_embalse_visor",
@@ -44,20 +46,23 @@ public class ConnectToServer {
         ftpClient = new FTPClient();
 
         try {
-            ftpClient.connect("168.63.45.161", 21);
+            String key = getKey(FTP_PATH);
+            String ip = getKey(FTP_SERVER_PATH);
+
+            ftpClient.connect(ip, 21);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
 
-            if (ftpClient.login("mondragon_edu", "mondragon@1975")) {
+            if (ftpClient.login("mondragon_edu", key)) {
                 deleteOldFiles(prefix);
 
                 for (int i = 0; i < DOWNLOAD_FILENAMES.size(); i++) {
                     String remoteFile = prefix + DOWNLOAD_FILENAMES.get(i) + DOWNLOAD_APPENDIX;
                     String localFilePath = DOWNLOAD_PATH + remoteFile;
                     File localFile = new File(localFilePath);
-                    downloadFile(remoteFile, localFilePath, localFile);
+                    downloadFile("/Processed/" + remoteFile, localFilePath, localFile);
                 }
 
                 createThreads();
@@ -69,6 +74,10 @@ public class ConnectToServer {
         } catch (IOException | InterruptedException e) {
             throw new InterruptedException();
         }
+    }
+
+    public static String getKey(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     public void downloadFile(String remoteFile, String localFilePath, File localFile) {
@@ -101,25 +110,25 @@ public class ConnectToServer {
     private static void createThreads() throws InterruptedException {
         List<Future<List<ConcurrentHashMap<String, String>>>> futures;
         List<CSVDownloaderReader> tasks = new ArrayList<>();
-
+        
         int cpu = Runtime.getRuntime().availableProcessors();
         int start = 0;
         int total = DOWNLOAD_FILENAMES.size();
         int threads = Math.min(cpu, total);
         int step = (int) Math.ceil((double) total / threads);
-
+        
         ExecutorService executorService = Executors.newFixedThreadPool(cpu);
-
+        
         for (int i = 0; i < threads; i++) {
             int end = Math.min(start + step, total);
             tasks.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES));
             start = end;
         }
-
+        
         futures = executorService.invokeAll(tasks);
-
+        
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
-
+        
         for (Future<List<ConcurrentHashMap<String, String>>> future : futures) {
             try {
                 List<ConcurrentHashMap<String, String>> resultList = future.get();
