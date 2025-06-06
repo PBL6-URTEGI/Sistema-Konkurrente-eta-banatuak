@@ -24,13 +24,16 @@ public class Publisher {
     private String exchange;
     private String senales;
 
-    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
+    static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
+    static final String RABBITMQ_PASSWORD_PATH = "./src/main/resources/credentials/guest.txt";
 
-    public Publisher(String exchange, String senales) {
+    public Publisher(String exchange, String senales) throws IOException {
+        String key = getKey(RABBITMQ_PASSWORD_PATH);
+
         factory = new ConnectionFactory();
         factory.setHost("localhost");
         factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setPassword(key);
         this.exchange = exchange;
         this.senales = senales;
     }
@@ -53,12 +56,12 @@ public class Publisher {
         }
     }
 
-    public static String getApiKey() throws IOException {
-        return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
+    public static String getKey(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     public List<EmbalseDato> recibirDatosAPI() throws IOException {
-        String key = getApiKey();
+        String key = getKey(API_KEY_PATH);
         String url = "https://www.saihebro.com/datos/apiopendata?senal=" + senales + "&inicio=&apikey="
                 + key;
         OkHttpClient client = UnsafeOkHttpClient.getUnsafeClient();

@@ -6,6 +6,8 @@ import org.apache.kafka.clients.producer.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
@@ -15,14 +17,22 @@ public class Subscriber {
     private String kafkaTopic;
     ConnectionFactory factory;
 
-    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ip) {
+    static final String RABBITMQ_PASSWORD_PATH = "./src/main/resources/credentials/rabbit.txt";
+
+    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ip_path) throws IOException {
+        String key = getKey(RABBITMQ_PASSWORD_PATH);
+        String ip = getKey(ip_path);
+
         factory = new ConnectionFactory();
         factory.setHost(ip);
         factory.setUsername("rabbit");
-        factory.setPassword("rabbit");
-
+        factory.setPassword(key);
         this.rabbitmqExchange = rabbitmqExchange;
         this.kafkaTopic = kafkaTopic;
+    }
+
+    public static String getKey(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     public void suscribe() throws InterruptedException {
