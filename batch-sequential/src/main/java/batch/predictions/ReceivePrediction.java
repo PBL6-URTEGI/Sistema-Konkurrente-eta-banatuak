@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReceivePrediction {
-    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
+    static final String API_KEY_DIRECTORY = "./src/main/resources/credentials/apikey.txt";
 
     public ReceivePrediction() throws IOException {
         List<Prediction> predictions = getPredictions();

@@ -22,34 +22,36 @@ import stream.common.model.EmbalseDato;
 public class Publisher {
     ConnectionFactory factory;
 
-    private String exchange;
+    private String topic;
     private String senales;
 
+    static final String EXCHANGE_STREAM = "stream";
     static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
     static final String RABBITMQ_PATH = "./src/main/resources/credentials/guest.txt";
 
-    public Publisher(String exchange, String senales) throws IOException {
+    public Publisher(String topic, String senales) throws IOException {
         String key = getKey(RABBITMQ_PATH);
 
         factory = new ConnectionFactory();
         factory.setHost("localhost");
         factory.setUsername("guest");
         factory.setPassword(key);
-        this.exchange = exchange;
+        this.topic = topic;
         this.senales = senales;
     }
 
     public void suscribe() throws Exception {
         List<EmbalseDato> datos = recibirDatosAPI();
+        String fullTopic = "stream." + topic;
 
         try (Connection connection = factory.newConnection()) {
             try (Channel channel = connection.createChannel()) {
-                channel.exchangeDeclare(exchange, "fanout", true);
+                channel.exchangeDeclare(EXCHANGE_STREAM, "topic", true);
 
                 for (EmbalseDato dato : datos) {
                     String message = dato.toString();
                     System.out.println("[Publisher -> Bridge] " + dato);
-                    channel.basicPublish(exchange, "", null, message.getBytes());
+                    channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes());
                 }
             }
         } catch (IOException | TimeoutException e) {

@@ -13,13 +13,14 @@ import java.util.concurrent.TimeoutException;
 
 public class Subscriber {
 
-    private String rabbitmqExchange;
+    private String rabbitmqTopic;
     private String kafkaTopic;
     ConnectionFactory factory;
 
+    static final String EXCHANGE_STREAM = "stream";
     static final String RABBITMQ_PATH = "./src/main/resources/credentials/rabbit.txt";
 
-    public Subscriber(String rabbitmqExchange, String kafkaTopic, String ipPath) throws IOException {
+    public Subscriber(String rabbitmqTopic, String kafkaTopic, String ipPath) throws IOException {
         String key = getKey(RABBITMQ_PATH);
         String ip = getKey(ipPath);
 
@@ -27,7 +28,7 @@ public class Subscriber {
         factory.setHost(ip);
         factory.setUsername("rabbit");
         factory.setPassword(key);
-        this.rabbitmqExchange = rabbitmqExchange;
+        this.rabbitmqTopic = rabbitmqTopic;
         this.kafkaTopic = kafkaTopic;
     }
 
@@ -38,10 +39,11 @@ public class Subscriber {
     public void suscribe() throws InterruptedException {
         try (Connection connection = factory.newConnection()) {
             try (Channel channel = connection.createChannel()) {
-                channel.exchangeDeclare(rabbitmqExchange, "fanout", true);
+                channel.exchangeDeclare("stream", "topic", true);
 
+                String topic = "stream." + rabbitmqTopic;
                 String queueName = channel.queueDeclare().getQueue();
-                channel.queueBind(queueName, rabbitmqExchange, "");
+                channel.queueBind(queueName, EXCHANGE_STREAM, topic);
 
                 MyConsumer consumer = new MyConsumer(channel);
                 boolean autoack = true;

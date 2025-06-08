@@ -1,6 +1,7 @@
 package batch.ftp;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -22,6 +23,8 @@ public class ConnectToServer {
     CSVDownloaderReader csvReader;
 
     static final String DOWNLOAD_PATH = "./src/main/resources/ftp/";
+    static final String FTP_PATH = "./src/main/resources/credentials/ftp.txt";
+    static final String FTP_SERVER_PATH = "./src/main/resources/credentials/server.txt";
     static final String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
     static final List<String> DOWNLOAD_FILENAMES = Arrays.asList(
             "caudal_rio", "nivel_embalse", "nivel_embalse_visor",
@@ -35,13 +38,16 @@ public class ConnectToServer {
         csvReader = new CSVDownloaderReader(DOWNLOAD_FILENAMES);
 
         try {
-            ftpClient.connect("168.63.45.161", 21);
+            String key = getKey(FTP_PATH);
+            String ip = getKey(FTP_SERVER_PATH);
+
+            ftpClient.connect(ip, 21);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
 
-            if (ftpClient.login("mondragon_edu", "mondragon@1975")) {
+            if (ftpClient.login("mondragon_edu", key)) {
                 csvReader.deleteOldFiles(prefix);
 
                 for (String fileName : DOWNLOAD_FILENAMES) {
@@ -50,7 +56,7 @@ public class ConnectToServer {
                     File localFile = new File(localFilePath);
                     csvReader.downloadFile("/Processed/" + remoteFile, localFilePath, localFile, ftpClient);
                 }
-                
+
                 readFiles();
                 ftpClient.logout();
             } else {
@@ -60,6 +66,10 @@ public class ConnectToServer {
         } catch (Exception e) {
             throw new InterruptedException();
         }
+    }
+
+    public static String getKey(String path) throws IOException {
+        return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     private void readFiles() throws Exception {
