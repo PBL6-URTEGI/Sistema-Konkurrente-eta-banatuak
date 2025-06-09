@@ -65,7 +65,7 @@ public class Publisher {
             for (EmbalseDato dato : datos) {
                 String message = dato.toString();
                 System.out.println("[Publisher -> Bridge] " + dato);
-                channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes());
+                channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes("UTF-8"));
             }
 
             synchronized (this) {
