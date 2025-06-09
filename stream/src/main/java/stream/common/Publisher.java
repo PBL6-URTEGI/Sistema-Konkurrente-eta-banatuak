@@ -9,9 +9,13 @@ import java.util.concurrent.TimeoutException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
+import com.rabbitmq.client.Consumer;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,6 +30,8 @@ public class Publisher {
     private String senales;
 
     static final String EXCHANGE_STREAM = "stream";
+    final static String EXCHANGE_DL = "dle";
+    final static String QUEUE_DL = "pub_dlq";
     static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
     static final String RABBITMQ_PATH = "./src/main/resources/credentials/guest.txt";
 
@@ -45,15 +51,32 @@ public class Publisher {
         String fullTopic = "stream." + topic;
 
         try (Connection connection = factory.newConnection()) {
-            try (Channel channel = connection.createChannel()) {
-                channel.exchangeDeclare(EXCHANGE_STREAM, "topic", true);
+            Channel channel = connection.createChannel();
+            channel.exchangeDeclare(EXCHANGE_STREAM, "topic", true);
+            channel.exchangeDeclare(EXCHANGE_DL, "direct", true);
 
-                for (EmbalseDato dato : datos) {
-                    String message = dato.toString();
-                    System.out.println("[Publisher -> Bridge] " + dato);
-                    channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes());
+            String deadLetterQueue = QUEUE_DL + "_" + topic;
+
+            channel.queueDeclare(deadLetterQueue, false, false, false, null);
+            channel.queueBind(deadLetterQueue, EXCHANGE_DL, topic);
+            Consumer consumerDeadLetter = new ConsumerDeadLetter(channel);
+            channel.basicConsume(deadLetterQueue, true, consumerDeadLetter);
+
+            for (EmbalseDato dato : datos) {
+                String message = dato.toString();
+                System.out.println("[Publisher -> Bridge] " + dato);
+                channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes());
+            }
+
+            synchronized (this) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+            channel.close();
+
         } catch (IOException | TimeoutException e) {
             // Exception
         }
@@ -82,5 +105,19 @@ public class Publisher {
         } catch (Exception e) {
             return Collections.emptyList();
         }
+    }
+
+    public class ConsumerDeadLetter extends DefaultConsumer {
+        public ConsumerDeadLetter(Channel channel) {
+            super(channel);
+        }
+
+        @Override
+        public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body)
+                throws IOException {
+            String message = new String(body, "UTF-8");
+            System.out.println("[Bridge -> Publisher] Rejected: " + message);
+        }
+
     }
 }
