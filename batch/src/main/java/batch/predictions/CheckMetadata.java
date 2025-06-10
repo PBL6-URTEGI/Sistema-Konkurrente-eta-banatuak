@@ -15,7 +15,7 @@ import okhttp3.Response;
 public class CheckMetadata {
 
     static final String FILE = "./src/main/resources/metadata.txt";
-    static final String API_KEY_DIRECTORY = "./src/main/resources/apikey.txt";
+    static final String API_KEY_DIRECTORY = "./src/main/resources/credentials/apikey.txt";
 
     public void suscribe() throws IOException, InterruptedException {
         Metadata metadata = getMetadata();
