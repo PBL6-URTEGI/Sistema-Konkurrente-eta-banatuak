@@ -1,6 +1,7 @@
 package stream.common;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -30,8 +31,8 @@ public class Publisher {
     private String senales;
 
     static final String EXCHANGE_STREAM = "stream";
-    final static String EXCHANGE_DL = "dle";
-    final static String QUEUE_DL = "pub_dlq";
+    static final String EXCHANGE_DL = "dle";
+    static final String QUEUE_DL = "pub_dlq";
     static final String API_KEY_PATH = "./src/main/resources/credentials/apikey.txt";
     static final String RABBITMQ_PATH = "./src/main/resources/credentials/guest.txt";
 
@@ -51,32 +52,31 @@ public class Publisher {
         String fullTopic = "stream." + topic;
 
         try (Connection connection = factory.newConnection()) {
-            Channel channel = connection.createChannel();
-            channel.exchangeDeclare(EXCHANGE_STREAM, "topic", true);
-            channel.exchangeDeclare(EXCHANGE_DL, "direct", true);
+            try (Channel channel = connection.createChannel()) {
+                channel.exchangeDeclare(EXCHANGE_STREAM, "topic", true);
+                channel.exchangeDeclare(EXCHANGE_DL, "direct", true);
 
-            String deadLetterQueue = QUEUE_DL + "_" + topic;
+                String deadLetterQueue = QUEUE_DL + "_" + topic;
 
-            channel.queueDeclare(deadLetterQueue, false, false, false, null);
-            channel.queueBind(deadLetterQueue, EXCHANGE_DL, topic);
-            Consumer consumerDeadLetter = new ConsumerDeadLetter(channel);
-            channel.basicConsume(deadLetterQueue, true, consumerDeadLetter);
+                channel.queueDeclare(deadLetterQueue, false, false, false, null);
+                channel.queueBind(deadLetterQueue, EXCHANGE_DL, topic);
+                Consumer consumerDeadLetter = new ConsumerDeadLetter(channel);
+                channel.basicConsume(deadLetterQueue, true, consumerDeadLetter);
 
-            for (EmbalseDato dato : datos) {
-                String message = dato.toString();
-                System.out.println("[Publisher -> Bridge] " + dato);
-                channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes("UTF-8"));
-            }
+                for (EmbalseDato dato : datos) {
+                    String message = dato.toString();
+                    System.out.println("[Publisher -> Bridge] " + dato);
+                    channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes(StandardCharsets.UTF_8));
+                }
 
-            synchronized (this) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                synchronized (this) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        // Exception
+                    }
                 }
             }
-            channel.close();
-
         } catch (IOException | TimeoutException e) {
             // Exception
         }
@@ -115,7 +115,7 @@ public class Publisher {
         @Override
         public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body)
                 throws IOException {
-            String message = new String(body, "UTF-8");
+            String message = new String(body, StandardCharsets.UTF_8);
             System.out.println("[Bridge -> Publisher] Rejected: " + message);
         }
 

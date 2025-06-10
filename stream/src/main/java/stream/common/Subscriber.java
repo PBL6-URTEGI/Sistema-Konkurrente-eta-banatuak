@@ -20,8 +20,8 @@ public class Subscriber {
     ConnectionFactory factory;
 
     static final String EXCHANGE_STREAM = "stream";
-    final static String EXCHANGE_DL = "dle";
-    final static String QUEUE_DL = "subs_dlq";
+    static final String EXCHANGE_DL = "dle";
+    static final String QUEUE_DL = "subs_dlq";
     static final String RABBITMQ_PATH = "./src/main/resources/credentials/rabbit.txt";
 
     public Subscriber(String rabbitmqTopic, String kafkaTopic, String ipPath) throws IOException {
@@ -64,8 +64,7 @@ public class Subscriber {
                 channel.basicCancel(tag);
             }
         } catch (IOException | TimeoutException e) {
-            // Handle exception or log
-            e.printStackTrace();
+            // Exception
         }
     }
 
@@ -93,12 +92,12 @@ public class Subscriber {
         public void handleDelivery(String consumerTag, Envelope envelope,
                 AMQP.BasicProperties properties, byte[] body) throws IOException {
             String message = new String(body, StandardCharsets.UTF_8);
-            
+
             Properties kafkaProps = new Properties();
             kafkaProps.put("bootstrap.servers", "localhost:9092");
             kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
             kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            
+
             try (KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps)) {
                 ProducerRecord<String, String> rec = new ProducerRecord<>(kafkaTopic, message);
                 producer.send(rec).get();

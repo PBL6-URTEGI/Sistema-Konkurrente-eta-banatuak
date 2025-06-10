@@ -12,6 +12,5 @@ public class DataPublisher {
         Publisher dp = new Publisher(TOPIC, SENALES);
         dp.suscribe();
         Runtime.getRuntime().addShutdownHook(new Thread(UnsafeOkHttpClient::shutdown));
-        System.exit(0);
     }
 }
