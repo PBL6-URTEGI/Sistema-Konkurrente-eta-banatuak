@@ -117,6 +117,8 @@ public class Publisher {
                 throws IOException {
             String message = new String(body, StandardCharsets.UTF_8);
             System.out.println("[Bridge -> Publisher] Rejected: " + message);
+            System.out.println("Kafka is not connected. Shutting system down...");
+            System.exit(0);
         }
 
     }

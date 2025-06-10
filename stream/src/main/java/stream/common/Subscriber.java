@@ -29,7 +29,7 @@ public class Subscriber {
         String ip = getKey(ipPath);
 
         factory = new ConnectionFactory();
-        factory.setHost(ip);
+        factory.setHost("localhost");
         factory.setUsername("rabbit");
         factory.setPassword(key);
         this.rabbitmqTopic = rabbitmqTopic;
