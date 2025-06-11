@@ -106,7 +106,7 @@ public class Subscriber {
                 String compositeId = timestamp + "_" + id;
 
                 String jsonMessage = String.format(
-                    "{\"_id\":\"%s\",\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\>
+                    "{\"_id\":\"%s\",\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\":\"%s\"}",
                     compositeId, id, timestamp, altitude, location, side
                 );
 
