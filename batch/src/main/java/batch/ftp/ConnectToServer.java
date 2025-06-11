@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -165,7 +166,7 @@ public class ConnectToServer {
         }
     }
 
-    public static void tagToFileValues(ConcurrentHashMap<String, String> resultMap, String fileName,
+    public static void tagToFileValues(ConcurrentMap<String, String> resultMap, String fileName,
             Map<String, Map<String, String>> tagToFileValues) {
         for (Map.Entry<String, String> entry : resultMap.entrySet()) {
             String key = entry.getKey();
