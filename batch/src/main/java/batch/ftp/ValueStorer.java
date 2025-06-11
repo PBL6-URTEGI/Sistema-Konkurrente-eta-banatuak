@@ -4,12 +4,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class ValueStorer {
-    private final ConcurrentHashMap<String, List<String>> values;
+    private final ConcurrentMap<String, List<String>> values;
     private final ConcurrentHashMap<String, String> averages;
     private List<String> headerKeys;
     private String title = "title";
 
-    public ValueStorer(ConcurrentHashMap<String, List<String>> values) {
+    public ValueStorer(ConcurrentMap<String, List<String>> values) {
         this.values = values;
         this.averages = new ConcurrentHashMap<>();
         this.headerKeys = new ArrayList<>();
