@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
-public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<String, String>>> {
+public class CSVDownloaderReader implements Callable<List<ConcurrentMap<String, String>>> {
     private int inicio;
     private int fin;
     private List<String> fileNames;
-    private List<ConcurrentHashMap<String, String>> mapList;
+    private List<ConcurrentMap<String, String>> mapList;
 
     static final String DOWNLOAD_PATH = "./src/main/resources/ftp/";
     static final String DOWNLOAD_APPENDIX = "_SAI-CHC.csv";
@@ -27,7 +28,7 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
     }
 
     @Override
-    public List<ConcurrentHashMap<String, String>> call() throws Exception {
+    public List<ConcurrentMap<String, String>> call() throws Exception {
         for (int i = inicio; i < fin; i++) {
             ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);

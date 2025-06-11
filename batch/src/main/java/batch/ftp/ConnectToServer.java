@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -117,7 +116,7 @@ public class ConnectToServer {
     }
 
     private static void createThreads() throws InterruptedException {
-        List<Future<List<ConcurrentHashMap<String, String>>>> futures;
+        List<Future<List<ConcurrentMap<String, String>>>> futures;
         List<CSVDownloaderReader> tasks = new ArrayList<>();
 
         int cpu = Runtime.getRuntime().availableProcessors();
@@ -138,10 +137,10 @@ public class ConnectToServer {
 
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
 
-        for (Future<List<ConcurrentHashMap<String, String>>> future : futures) {
+        for (Future<List<ConcurrentMap<String, String>>> future : futures) {
             try {
-                List<ConcurrentHashMap<String, String>> resultList = future.get();
-                for (ConcurrentHashMap<String, String> resultMap : resultList) {
+                List<ConcurrentMap<String, String>> resultList = future.get();
+                for (ConcurrentMap<String, String> resultMap : resultList) {
                     // Hace un mapa del fichero y sus valores
                     String fileName = resultMap.get("title");
                     tagToFileValues(resultMap, fileName, tagToFileValues);

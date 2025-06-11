@@ -70,7 +70,7 @@ public class ValueStorer {
         }
     }
 
-    public ConcurrentHashMap<String, String> getMap() {
+    public ConcurrentMap<String, String> getMap() {
         return averages;
     }
 }
