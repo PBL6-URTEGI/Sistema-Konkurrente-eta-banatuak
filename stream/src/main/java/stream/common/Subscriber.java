@@ -93,18 +93,34 @@ public class Subscriber {
                 AMQP.BasicProperties properties, byte[] body) throws IOException {
             String message = new String(body, StandardCharsets.UTF_8);
 
-            Properties kafkaProps = new Properties();
-            kafkaProps.put("bootstrap.servers", "localhost:9092");
-            kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            String[] parts = message.split("\\|");
+            if (parts.length == 5) {
+                String id = parts[0].trim();
+                String timestamp = parts[1].trim();
+                String altitude = parts[2].trim();
+                String location = parts[3].trim();
+                String side = parts[4].trim();
 
-            try (KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps)) {
-                ProducerRecord<String, String> rec = new ProducerRecord<>(kafkaTopic, message);
-                producer.send(rec).get();
-                System.out.println("[Bridge -> Kafka] " + message);
-                this.getChannel().basicAck(envelope.getDeliveryTag(), false);
-            } catch (Exception e) {
-                System.out.println("[Bridge -> Publisher] Kafka error: " + e.getMessage());
+                String jsonMessage = String.format(
+                        "{\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\":\"%s\"}",
+                        id, timestamp, altitude, location, side);
+
+                Properties kafkaProps = new Properties();
+                kafkaProps.put("bootstrap.servers", "localhost:9092");
+                kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+                kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+                try (KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps)) {
+                    ProducerRecord<String, String> rec = new ProducerRecord<>(kafkaTopic, jsonMessage);
+                    producer.send(rec).get();
+                    System.out.println("[Bridge -> Kafka] " + jsonMessage);
+                    this.getChannel().basicAck(envelope.getDeliveryTag(), false);
+                } catch (Exception e) {
+                    System.out.println("[Bridge -> Publisher] Kafka error: " + e.getMessage());
+                    this.getChannel().basicReject(envelope.getDeliveryTag(), false);
+                }
+            } else {
+                System.out.println("[Bridge] Message received has unexpected format: " + message);
                 this.getChannel().basicReject(envelope.getDeliveryTag(), false);
             }
         }
