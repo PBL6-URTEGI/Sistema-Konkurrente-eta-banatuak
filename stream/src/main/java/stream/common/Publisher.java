@@ -64,6 +64,7 @@ public class Publisher {
                 channel.basicConsume(deadLetterQueue, true, consumerDeadLetter);
 
                 for (EmbalseDato dato : datos) {
+                    // Manda los valores de la API al conector
                     String message = dato.toString();
                     System.out.println("[Publisher -> Bridge] " + dato);
                     channel.basicPublish(EXCHANGE_STREAM, fullTopic, null, message.getBytes(StandardCharsets.UTF_8));
@@ -97,6 +98,7 @@ public class Publisher {
                 .addHeader("cache-control", "no-cache")
                 .build();
 
+        // Recibe los datos de la API
         try (Response response = client.newCall(request).execute()) {
             String body = response.body().string();
             ObjectMapper mapper = new ObjectMapper();
@@ -115,6 +117,7 @@ public class Publisher {
         @Override
         public void handleDelivery(String consumerTag, Envelope envelope, BasicProperties properties, byte[] body)
                 throws IOException {
+            // Recibe los datos del conector que no se hayan podido procesar/enviar
             String message = new String(body, StandardCharsets.UTF_8);
             System.out.println("[Bridge -> Publisher] Rejected: " + message);
         }

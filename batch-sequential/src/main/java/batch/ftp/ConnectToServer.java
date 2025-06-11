@@ -41,15 +41,19 @@ public class ConnectToServer {
             String key = getKey(FTP_PATH);
             String ip = getKey(FTP_SERVER_PATH);
 
+            // Se conecta al servidor FTP
             ftpClient.connect(ip, 21);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
+            // Coge la fecha de hoy como prefijo (por ejemplo 20250611_)
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
 
             if (ftpClient.login("mondragon_edu", key)) {
+                // Elimina ficheros antiguos
                 csvReader.deleteOldFiles(prefix);
 
+                // Descarga todos los ficheros de hoy
                 for (String fileName : DOWNLOAD_FILENAMES) {
                     String remoteFile = prefix + fileName + DOWNLOAD_APPENDIX;
                     String localFilePath = DOWNLOAD_PATH + remoteFile;
@@ -57,6 +61,7 @@ public class ConnectToServer {
                     csvReader.downloadFile("/Processed/" + remoteFile, localFilePath, localFile, ftpClient);
                 }
 
+                // Lee los ficheros
                 readFiles();
                 ftpClient.logout();
             } else {
@@ -69,6 +74,7 @@ public class ConnectToServer {
     }
 
     public static String getKey(String path) throws IOException {
+        // Devuelve el contenido de un .txt
         return new String(Files.readAllBytes(Paths.get(path)));
     }
 
@@ -77,6 +83,7 @@ public class ConnectToServer {
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
 
         for (Map<String, String> map : mapList) {
+            // Hace un mapa del fichero y sus valores
             String fileName = map.get("title");
             tagToFileValues(map, fileName, tagToFileValues);
         }
@@ -85,6 +92,7 @@ public class ConnectToServer {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode arrayNode = mapper.createArrayNode();
 
+            // Crea un JSON con todos los valores
             for (Map.Entry<String, Map<String, String>> tagEntry : tagToFileValues.entrySet()) {
                 ObjectNode objNode = mapper.createObjectNode();
                 objNode.put("id_estacion", tagEntry.getKey());
@@ -106,9 +114,11 @@ public class ConnectToServer {
             Map<String, Map<String, String>> tagToFileValues) {
         for (Map.Entry<String, String> entry : resultMap.entrySet()) {
             String key = entry.getKey();
+            // Si la key es el nombre del fichero no lo mete
             if ("title".equals(key))
                 continue;
 
+            // Si la key es un ID de estación lo mete
             tagToFileValues
                     .computeIfAbsent(key, k -> new LinkedHashMap<>())
                     .put(fileName, entry.getValue());

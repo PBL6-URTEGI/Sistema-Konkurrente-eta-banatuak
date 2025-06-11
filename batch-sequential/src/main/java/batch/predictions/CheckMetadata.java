@@ -18,12 +18,14 @@ public class CheckMetadata {
     static final String API_KEY_DIRECTORY = "./src/main/resources/credentials/apikey.txt";
 
     public void suscribe() throws IOException {
+        // Recibe la metadata de las predicciones
         Metadata metadata = getMetadata();
         File file = new File(FILE);
 
         System.out.println(metadata);
 
         try {
+            // Si no está guardada, la guarda y pide las predicciones
             if (!file.exists()) {
                 file.createNewFile();
                 try (FileWriter writer = new FileWriter(file)) {
@@ -34,6 +36,7 @@ public class CheckMetadata {
             } else {
                 String existingContent = new String(Files.readAllBytes(Paths.get(FILE)));
 
+                // Si existe pero es distinta, la guarda y pide las predicciones
                 if (!existingContent.equals(metadata.toString())) {
                     try (FileWriter writer = new FileWriter(file)) {
                         writer.write(metadata.toString());
@@ -41,6 +44,7 @@ public class CheckMetadata {
                     System.out.println("File updated with new metadata. Initiating prediction API call.");
                     new ReceivePrediction();
                 } else {
+                    // Si existe y es igual, no hace llamada
                     System.out.println("No changes in metadata. File not updated.");
                 }
             }
@@ -50,6 +54,7 @@ public class CheckMetadata {
     }
 
     public static String getApiKey() throws IOException {
+        // Recibe contenido de .txt
         return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
     }
 
@@ -64,6 +69,7 @@ public class CheckMetadata {
                 .addHeader("cache-control", "no-cache")
                 .build();
 
+        // Devuelve la metadata que recibe de la API
         try (Response response = client.newCall(request).execute()) {
             String body = response.body().string();
             ObjectMapper mapper = new ObjectMapper();

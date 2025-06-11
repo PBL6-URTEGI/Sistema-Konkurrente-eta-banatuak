@@ -26,11 +26,14 @@ public class ReceivePrediction {
         // predictions.addAll(predictions);
 
         long start = System.currentTimeMillis();
+
+        // Descarta las predicciones antiguas
         new OutdatedPredictionRemover(predictions);
 
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            // Parsea las predicciones actuales a JSON
             mapper.writerWithDefaultPrettyPrinter().writeValue(
                     new File("./src/main/resources/predictions.json"), predictions);
             long finish = System.currentTimeMillis();
@@ -41,6 +44,7 @@ public class ReceivePrediction {
     }
 
     public static String getApiKey() throws IOException {
+        // Recibe contenido de un .txt
         return new String(Files.readAllBytes(Paths.get(API_KEY_DIRECTORY)));
     }
 
@@ -55,6 +59,7 @@ public class ReceivePrediction {
                 .addHeader("cache-control", "no-cache")
                 .build();
 
+        // Devuelve las predicciones de la API
         try (Response response = client.newCall(request).execute()) {
             InputStream is = response.body().byteStream();
 

@@ -48,6 +48,7 @@ public class Subscriber {
 
                 String topic = "stream." + rabbitmqTopic;
 
+                // Configura el exchange y el topic
                 Map<String, Object> arguments = new HashMap<>();
                 arguments.put("x-dead-letter-exchange", EXCHANGE_DL);
                 arguments.put("x-dead-letter-routing-key", rabbitmqTopic);
@@ -57,6 +58,7 @@ public class Subscriber {
                 channel.queueDeclare(deadLetterQueue, false, false, false, arguments);
                 channel.queueBind(deadLetterQueue, EXCHANGE_STREAM, topic);
 
+                // Recibe los datos que se envían desde el publisher
                 MyConsumer consumer = new MyConsumer(channel);
                 String tag = channel.basicConsume(deadLetterQueue, false, consumer);
 
@@ -93,6 +95,7 @@ public class Subscriber {
                 AMQP.BasicProperties properties, byte[] body) throws IOException {
             String message = new String(body, StandardCharsets.UTF_8);
 
+            // Parsea el mensaje que recibe a JSON
             String[] parts = message.split("\\|");
             if (parts.length == 5) {
                 String id = parts[0].trim();
@@ -105,21 +108,25 @@ public class Subscriber {
                         "{\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\":\"%s\"}",
                         id, timestamp, altitude, location, side);
 
+                // Envía el mensaje a Kafka
                 Properties kafkaProps = new Properties();
                 kafkaProps.put("bootstrap.servers", "localhost:9092");
                 kafkaProps.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
                 kafkaProps.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
                 try (KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProps)) {
+                    // Si Kafka está conectado, se envía
                     ProducerRecord<String, String> rec = new ProducerRecord<>(kafkaTopic, jsonMessage);
                     producer.send(rec).get();
                     System.out.println("[Bridge -> Kafka] " + jsonMessage);
                     this.getChannel().basicAck(envelope.getDeliveryTag(), false);
                 } catch (Exception e) {
+                    // Si Kafka está conectado, se rechaza y se le comunica al publisher
                     System.out.println("[Bridge -> Publisher] Kafka error: " + e.getMessage());
                     this.getChannel().basicReject(envelope.getDeliveryTag(), false);
                 }
             } else {
+                // Si el mensaje tiene mal formato, se rechaza y se le comunica al publisher
                 System.out.println("[Bridge] Message received has unexpected format: " + message);
                 this.getChannel().basicReject(envelope.getDeliveryTag(), false);
             }

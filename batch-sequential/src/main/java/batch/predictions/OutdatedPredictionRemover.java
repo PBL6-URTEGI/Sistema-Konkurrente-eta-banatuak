@@ -22,10 +22,11 @@ public class OutdatedPredictionRemover {
 
         while (iterator.hasNext()) {
             Prediction prediction = iterator.next();
+            // Coge la fecha de la predicción
             String date = prediction.getMs_FECHA_HORA().getDate();
-
             LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
 
+            // Si es anterior a la de hoy la descarta
             if (dateTime.isBefore(now) || dateTime.isEqual(now)) {
                 iterator.remove();
             }
