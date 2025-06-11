@@ -103,10 +103,12 @@ public class Subscriber {
                 String altitude = parts[2].trim();
                 String location = parts[3].trim();
                 String side = parts[4].trim();
+                String compositeId = timestamp + "_" + id;
 
                 String jsonMessage = String.format(
-                        "{\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\":\"%s\"}",
-                        id, timestamp, altitude, location, side);
+                    "{\"_id\":\"%s\",\"id\":\"%s\",\"timestamp\":\"%s\",\"altitude\":\"%s\",\"location\":\"%s\",\"side\>
+                    compositeId, id, timestamp, altitude, location, side
+                );
 
                 // Envía el mensaje a Kafka
                 Properties kafkaProps = new Properties();
