@@ -50,15 +50,19 @@ public class ConnectToServer {
             String key = getKey(FTP_PATH);
             String ip = getKey(FTP_SERVER_PATH);
 
+            // Se conecta al servidor FTP
             ftpClient.connect(ip, 21);
             ftpClient.enterLocalPassiveMode();
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
+            // Coge la fecha de hoy como prefijo (por ejemplo 20250611_)
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
 
             if (ftpClient.login("mondragon_edu", key)) {
+                // Elimina ficheros antiguos
                 deleteOldFiles(prefix);
 
+                // Descarga todos los ficheros de hoy
                 for (int i = 0; i < DOWNLOAD_FILENAMES.size(); i++) {
                     String remoteFile = prefix + DOWNLOAD_FILENAMES.get(i) + DOWNLOAD_APPENDIX;
                     String localFilePath = DOWNLOAD_PATH + remoteFile;
@@ -66,6 +70,7 @@ public class ConnectToServer {
                     downloadFile("/Processed/" + remoteFile, localFilePath, localFile);
                 }
 
+                // Paraleliza la lectura de los ficheros
                 createThreads();
                 ftpClient.logout();
             } else {
@@ -78,11 +83,13 @@ public class ConnectToServer {
     }
 
     public static String getKey(String path) throws IOException {
+        // Devuelve el contenido de un .txt
         return new String(Files.readAllBytes(Paths.get(path)));
     }
 
     public void downloadFile(String remoteFile, String localFilePath, File localFile) {
         if (localFile.exists()) {
+            // Si el fichero ya existe no lo descarga
             System.out.println("File already downloaded: " + remoteFile);
         } else {
             try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
@@ -98,6 +105,7 @@ public class ConnectToServer {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(DOWNLOAD_PATH))) {
             for (Path file : stream) {
                 String fileName = file.getFileName().toString();
+                // Si el prefijo del fichero no coincide con el de hoy es antiguo
                 if (!fileName.startsWith(prefix)) {
                     Files.delete(file);
                     System.out.println("Deleted old file: " + fileName);
@@ -111,29 +119,30 @@ public class ConnectToServer {
     private static void createThreads() throws InterruptedException {
         List<Future<List<ConcurrentHashMap<String, String>>>> futures;
         List<CSVDownloaderReader> tasks = new ArrayList<>();
-        
+
         int cpu = Runtime.getRuntime().availableProcessors();
         int start = 0;
         int total = DOWNLOAD_FILENAMES.size();
         int threads = Math.min(cpu, total);
         int step = (int) Math.ceil((double) total / threads);
-        
+
         ExecutorService executorService = Executors.newFixedThreadPool(cpu);
-        
+
         for (int i = 0; i < threads; i++) {
             int end = Math.min(start + step, total);
             tasks.add(new CSVDownloaderReader(start, end, DOWNLOAD_FILENAMES));
             start = end;
         }
-        
+
         futures = executorService.invokeAll(tasks);
-        
+
         Map<String, Map<String, String>> tagToFileValues = new LinkedHashMap<>();
-        
+
         for (Future<List<ConcurrentHashMap<String, String>>> future : futures) {
             try {
                 List<ConcurrentHashMap<String, String>> resultList = future.get();
                 for (ConcurrentHashMap<String, String> resultMap : resultList) {
+                    // Hace un mapa del fichero y sus valores
                     String fileName = resultMap.get("title");
                     tagToFileValues(resultMap, fileName, tagToFileValues);
                 }
@@ -149,6 +158,7 @@ public class ConnectToServer {
             ObjectMapper mapper = new ObjectMapper();
             ArrayNode arrayNode = mapper.createArrayNode();
 
+            // Crea un JSON con todos los valores
             for (Map.Entry<String, Map<String, String>> tagEntry : tagToFileValues.entrySet()) {
                 ObjectNode objNode = mapper.createObjectNode();
                 objNode.put("id_estacion", tagEntry.getKey());
@@ -170,9 +180,11 @@ public class ConnectToServer {
             Map<String, Map<String, String>> tagToFileValues) {
         for (Map.Entry<String, String> entry : resultMap.entrySet()) {
             String key = entry.getKey();
+            // Si la key es el nombre del fichero no lo mete
             if ("title".equals(key))
                 continue;
 
+            // Si la key es un ID de estación lo mete
             tagToFileValues
                     .computeIfAbsent(key, k -> new LinkedHashMap<>())
                     .put(fileName, entry.getValue());

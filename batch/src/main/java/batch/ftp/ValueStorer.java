@@ -18,19 +18,22 @@ public class ValueStorer {
     public void parse(String line, String fileName) {
         String[] elements = line.split(",");
 
+        // Identifica si es la primera línea (header incluye "Fecha")
         if (elements[0].equals("Fecha")) {
+            // Primer key-value es el nombre del fichero
             values.put(title, Collections.synchronizedList(new ArrayList<>()));
             values.get(title).add(fileName);
 
             headerKeys.clear();
             headerKeys.add(title);
 
+            // Mete los demás IDs como keys
             for (int i = 1; i < elements.length; i++) {
                 values.put(elements[i], Collections.synchronizedList(new ArrayList<>()));
-                headerKeys.add(elements[i]); // keep keys in order
+                headerKeys.add(elements[i]);
             }
         } else {
-            // Use headerKeys for stable order
+            // Si no es primera línea del CSV, los mete como values
             for (int i = 1; i < elements.length; i++) {
                 String key = headerKeys.get(i);
                 values.get(key).add(elements[i]);
@@ -39,6 +42,7 @@ public class ValueStorer {
     }
 
     public void calculateAverage() {
+        // Vuelve a guardar el nombre del fichero para identificarlo
         List<String> titles = values.get(title);
         averages.put(title, titles.get(0));
 
@@ -50,6 +54,7 @@ public class ValueStorer {
             double sum = 0.0;
             int count = 0;
 
+            // Calcula la media de cada estación
             for (String valStr : strValues) {
                 try {
                     double val = Double.parseDouble(valStr);

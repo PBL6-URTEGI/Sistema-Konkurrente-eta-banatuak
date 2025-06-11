@@ -35,22 +35,28 @@ public class CSVDownloaderReader {
         for (String fileName : fileNames) {
             Map<String, List<String>> map = new HashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);
-            
+
+            // Coge la ruta del fichero
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
             String remoteFile = prefix + fileName + DOWNLOAD_APPENDIX;
             String localFilePath = DOWNLOAD_PATH + remoteFile;
             File localFile = new File(localFilePath);
-            
+
+            // Lee el fichero
             readFile(localFile, valueStorer, fileName);
+            // Calcula la media de cada estación
             valueStorer.calculateAverage();
 
             mapList.add(valueStorer.getMap());
         }
+
+        // Devuelve los mapas con las mediaa
         return mapList;
     }
 
     public void downloadFile(String remoteFile, String localFilePath, File localFile, FTPClient ftpClient) {
         if (localFile.exists()) {
+            // Si el fichero ya existe no lo descarga
             System.out.println("File already downloaded: " + remoteFile);
         } else {
             try (OutputStream outputStream = new FileOutputStream(localFilePath)) {
@@ -66,6 +72,7 @@ public class CSVDownloaderReader {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(DOWNLOAD_PATH))) {
             for (Path file : stream) {
                 String fileName = file.getFileName().toString();
+                // Si el prefijo del fichero no coincide con el de hoy es antiguo
                 if (!fileName.startsWith(prefix)) {
                     Files.delete(file);
                     System.out.println("Deleted old file: " + fileName);
@@ -79,9 +86,11 @@ public class CSVDownloaderReader {
     public void readFile(File localFile, ValueStorer valueStorer, String fileName) {
         try {
             Scanner scanner = new Scanner(localFile);
+            // Lee cada línea del fichero
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
                 if (!line.isEmpty()) {
+                    // Guarda los valores de la línea
                     valueStorer.parse(line, fileName);
                 }
             }

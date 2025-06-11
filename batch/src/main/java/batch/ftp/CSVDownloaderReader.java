@@ -32,25 +32,32 @@ public class CSVDownloaderReader implements Callable<List<ConcurrentHashMap<Stri
             ConcurrentHashMap<String, List<String>> map = new ConcurrentHashMap<>();
             ValueStorer valueStorer = new ValueStorer(map);
 
+            // Coge la ruta del fichero
             String prefix = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "_";
             String remoteFile = prefix + fileNames.get(i) + DOWNLOAD_APPENDIX;
             String localFilePath = DOWNLOAD_PATH + remoteFile;
             File localFile = new File(localFilePath);
 
+            // Lee el fichero
             readFile(localFile, valueStorer, fileNames.get(i));
+            // Calcula la media de cada estación
             valueStorer.calculateAverage();
 
             mapList.add(valueStorer.getMap());
         }
+
+        // Devuelve los mapas con las mediaa
         return mapList;
     }
 
     public void readFile(File localFile, ValueStorer valueStorer, String fileName) {
         try {
             Scanner scanner = new Scanner(localFile);
+            // Lee cada línea del fichero
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine().trim();
                 if (!line.isEmpty()) {
+                    // Guarda los valores de la línea
                     valueStorer.parse(line, fileName);
                 }
             }

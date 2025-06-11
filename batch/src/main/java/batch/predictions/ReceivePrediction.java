@@ -33,20 +33,20 @@ public class ReceivePrediction {
         // predictions.addAll(predictions);
 
         List<Prediction> toJSON = new ArrayList<>();
-        
+
         List<OutdatedPredictionRemover> tasks = new ArrayList<>();
         List<Future<List<Prediction>>> futures;
-        
+
         int cpu = Runtime.getRuntime().availableProcessors();
         int start = 0;
         int end;
         int total = predictions.size();
         int step = total / cpu;
-        
+
         ExecutorService executorService = Executors.newFixedThreadPool(cpu);
 
         long timeStart = System.currentTimeMillis();
-        
+
         for (int i = 0; i <= cpu - 1; i++) {
             start = i * step;
             if (i == cpu - 1) {
@@ -54,11 +54,13 @@ public class ReceivePrediction {
             } else {
                 end = (i + 1) * step;
             }
+            // Descarta las predicciones antiguas
             tasks.add(new OutdatedPredictionRemover(start, end, predictions));
         }
 
         futures = executorService.invokeAll(tasks);
 
+        // Añade todas las predicciones a una lista
         for (Future<List<Prediction>> future : futures) {
             try {
                 List<Prediction> resultList = future.get();
@@ -74,6 +76,7 @@ public class ReceivePrediction {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            // Parsea la lista a JSON
             mapper.writerWithDefaultPrettyPrinter().writeValue(
                     new File("./src/main/resources/predictions.json"), toJSON);
             long timeFinish = System.currentTimeMillis();
@@ -84,6 +87,7 @@ public class ReceivePrediction {
     }
 
     public static String getKey(String path) throws IOException {
+        // Recibe contenido de un .txt
         return new String(Files.readAllBytes(Paths.get(path)));
     }
 
@@ -98,6 +102,7 @@ public class ReceivePrediction {
                 .addHeader("cache-control", "no-cache")
                 .build();
 
+        // Devuelve las predicciones de la API
         try (Response response = client.newCall(request).execute()) {
             InputStream is = response.body().byteStream();
 

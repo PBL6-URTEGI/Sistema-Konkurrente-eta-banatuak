@@ -26,14 +26,17 @@ public class OutdatedPredictionRemover implements Callable<List<Prediction>> {
         List<Prediction> predictionList = new ArrayList<>();
 
         for (int i = start; i < end; i++) {
+            // Coge la fecha de la predicción
             String date = predictions.get(i).getMs_FECHA_HORA().getDate();
             LocalDateTime dateTime = LocalDateTime.parse(date, formatter);
-
+            
+            // Si es posterior a la de hoy la guarda
             if (!dateTime.isBefore(now) && !dateTime.isEqual(now)) {
                 predictionList.add(predictions.get(i));
             }
         }
 
+        // Devuelve las predicciones con fecha posterior
         return predictionList;
     }
 }
